@@ -35,16 +35,17 @@ def frames(replay, max_frames=320, scale=1):
     every = max(1, int(np.ceil(len(acts) / max_frames)))
     font, small = _font(13), _font(11)
     size = sim.S * CELL
+    head = HEAD if n <= 2 else HEAD + 20
     out = []
 
     def draw(final=False):
-        im = Image.new("RGB", (size, size + HEAD), BG)
+        im = Image.new("RGB", (size, size + head), BG)
         d = ImageDraw.Draw(im)
         g = st["grid"]
         for y in range(sim.S):
             for x in range(sim.S):
                 v = g[y, x]
-                x0, y0 = x * CELL, HEAD + y * CELL
+                x0, y0 = x * CELL, head + y * CELL
                 if v == 1:
                     d.rectangle([x0, y0, x0 + CELL - 1, y0 + CELL - 1], fill=WALL)
                 elif v >= 2:
@@ -53,25 +54,28 @@ def frames(replay, max_frames=320, scale=1):
                     d.rectangle([x0 + 1, y0 + 1, x0 + CELL - 2, y0 + CELL - 2], fill=dim)
         for b in range(n):
             y, x = st["pos"][b]
-            x0, y0 = x * CELL, HEAD + y * CELL
+            x0, y0 = x * CELL, head + y * CELL
             if st["alive"][b]:
                 d.rectangle([x0 - 1, y0 - 1, x0 + CELL, y0 + CELL], fill=(255, 255, 255), outline=colors[b], width=2)
             else:
                 d.line([x0, y0, x0 + CELL, y0 + CELL], fill=(255, 80, 80), width=3)
                 d.line([x0 + CELL, y0, x0, y0 + CELL], fill=(255, 80, 80), width=3)
-        xx = 6
+        xx, yy = 6, 11
         for b in range(n):
-            d.rectangle([xx, 11, xx + 10, 21], fill=colors[b])
             txt = names[b] + ("" if st["alive"][b] else " ✗")
-            d.text((xx + 14, 9), txt, fill=(235, 235, 240) if st["alive"][b] else (120, 120, 125), font=font)
-            xx += 22 + int(d.textlength(txt, font=font))
+            wdt = 22 + int(d.textlength(txt, font=font))
+            if xx + wdt > size - 74 and xx > 6:
+                xx, yy = 6, yy + 20
+            d.rectangle([xx, yy, xx + 10, yy + 10], fill=colors[b])
+            d.text((xx + 14, yy - 2), txt, fill=(235, 235, 240) if st["alive"][b] else (120, 120, 125), font=font)
+            xx += wdt
         d.text((size - 70, 11), f"tick {st['t']}", fill=(150, 150, 160), font=small)
         if final:
             r = replay.get("result", -1)
             msg = "draw" if r is None or r < 0 else f"{names[r]} wins"
             w = d.textlength(msg, font=_font(22))
-            d.rectangle([size / 2 - w / 2 - 14, HEAD + size / 2 - 22, size / 2 + w / 2 + 14, HEAD + size / 2 + 20], fill=(0, 0, 0))
-            d.text((size / 2 - w / 2, HEAD + size / 2 - 16), msg, fill=(255, 255, 255), font=_font(22))
+            d.rectangle([size / 2 - w / 2 - 14, head + size / 2 - 22, size / 2 + w / 2 + 14, head + size / 2 + 20], fill=(0, 0, 0))
+            d.text((size / 2 - w / 2, head + size / 2 - 16), msg, fill=(255, 255, 255), font=_font(22))
         if scale != 1:
             im = im.resize((im.width * scale, im.height * scale), Image.NEAREST)
         return im
