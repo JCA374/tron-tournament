@@ -1,1 +1,48 @@
-{"note": "Being built: training starts tonight.", "models": {}, "pauses": []}
+{
+ "started": "2026-11-11T22:01:38.202165+01:00",
+ "round": 0,
+ "next_round_at": 1794432098.2022548,
+ "models": {
+  "ppo": {
+   "status": "training",
+   "cpus": "0",
+   "cores": 1,
+   "started_at": 1794430898.2102084,
+   "train": "starting"
+  },
+  "dqn": {
+   "status": "training",
+   "cpus": "1",
+   "cores": 1,
+   "started_at": 1794430898.2164347,
+   "train": "starting"
+  },
+  "neat": {
+   "status": "training",
+   "cpus": "2",
+   "cores": 1,
+   "started_at": 1794430898.2231185,
+   "train": "starting"
+  },
+  "cmaes": {
+   "status": "training",
+   "cpus": "3",
+   "cores": 1,
+   "started_at": 1794430898.2301445,
+   "train": "starting"
+  },
+  "az": {
+   "status": "training",
+   "cpus": "4",
+   "cores": 1,
+   "started_at": 1794430898.2382135,
+   "train": "starting"
+  }
+ },
+ "pauses": [],
+ "knockouts_done": 0,
+ "final_done": false,
+ "leader": null,
+ "restarts": {},
+ "note": ""
+}

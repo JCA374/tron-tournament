@@ -1,0 +1,1 @@
+{"t": "2026-11-11 22:01", "kind": "start", "title": "The tournament starts", "text": "Five models start training from scratch: PPO, DQN, NEAT, CMA-ES, Mini-AlphaZero. First ranking round in 20 minutes, then every 30 minutes."}
