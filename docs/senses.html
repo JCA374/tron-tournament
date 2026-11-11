@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>How it sees</title>
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css?v=f053e149">
 </head>
 <body>
 <main>
@@ -54,9 +54,9 @@ nothing but "free cells", always picking the largest. Beating it means a model l
 <p class="muted small">Why the evolution methods skip the window: evolution scales badly with the number of inputs.
 NEAT would start with 2,000+ connections instead of 69, and CMA-ES's covariance matrix grows with the square of the number of weights.</p>
 </main>
-<script src="site.js"></script>
-<script src="common.js"></script>
-<script src="project.js"></script>
+<script src="site.js?v=707a4ed6"></script>
+<script src="common.js?v=448bd7f6"></script>
+<script src="project.js?v=13964608"></script>
 <script>
 fetch('img/senses_features.json').then((r) => r.json()).then((f) => {
   $('feats').innerHTML = '<tr><th>#</th><th>Number</th><th>Value in this position</th></tr>' +

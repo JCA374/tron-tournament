@@ -259,7 +259,9 @@ def main():
     def save():
         atomic_torch_save({"net": net.state_dict(), "opt": opt.state_dict(), "hp": HP, "games": games,
                            "positions": positions, "updates": updates}, ck_path)
-        run.publish_latest(ck_path, games=games, positions=positions)
+        play_path = run.ckpt_path("play.pt")
+        atomic_torch_save({"net": net.state_dict(), "hp": HP}, play_path)
+        run.publish_latest(play_path, games=games, positions=positions)
 
     while not run.stop:
         if run.paused():

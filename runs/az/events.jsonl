@@ -1,1 +1,2 @@
 {"t": "2026-11-11 22:05", "kind": "run_start", "note": "Mini-AlphaZero: decoupled PUCT search, 48 simulations per move in self-play, 32 in the tournament. hp={'hidden': 128, 'sims': 48, 'eval_sims': 32, 'c_puct': 1.5, 'dir_alpha': 0.6, 'dir_frac': 0.25, 'temp_moves': 12, 'parallel_games': 16, 'buffer': 80000, 'batch': 256, 'lr': 0.001, 'wd': 0.0001, 'train_per_game': 6, 'p_bot_game': 0.0}"}
+{"t": "2026-11-11 22:12", "kind": "resume", "note": "64 self-play games; the replay buffer starts empty again"}

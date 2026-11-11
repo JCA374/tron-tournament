@@ -160,7 +160,12 @@ def ensure_trainers(s):
             continue
         if st.get("started_at") and time.time() - st["started_at"] < 90:
             continue                           # just started: give it time to show up
-        if st.get("started_at") and time.time() - st["started_at"] > 30:
+        marker = os.path.join(ROOT, "runs", m, "RESTART")
+        if os.path.exists(marker):              # a deliberate restart (new code or settings): not a crash
+            note = open(marker).read().strip()
+            os.remove(marker)
+            event("restart", f"{LBL[m]} restarted on purpose", note, model=m)
+        elif st.get("started_at") and time.time() - st["started_at"] > 30:
             tail = ""
             try:
                 tail = "".join(open(os.path.join(ROOT, "logs", f"{m}.log")).readlines()[-6:])[-800:]
@@ -343,7 +348,11 @@ def main():
                 continue
             if ranking is not None and ranking.poll() is not None:
                 after_round(s)
+                s["processed_round"] = s["round"]
                 ranking = None
+            if ranking is None and s.get("processed_round", 0) < s["round"] and not pgrep("^" + PY + " -m tournament.ranking"):
+                after_round(s)                    # a round that finished while the supervisor was restarting
+                s["processed_round"] = s["round"]
             if ranking is None and s["knockouts_done"] < len(kos) and now() >= kos[s["knockouts_done"]]:
                 s["knockouts_done"] += 1
                 knockout(s, s["knockouts_done"])

@@ -56,7 +56,9 @@ def main():
     def save():
         atomic_torch_save({"net": net.state_dict(), "opt": opt.state_dict(), "hp": HP, "it": it, "steps": steps,
                            "games": games, "pool": pool}, ck_path)
-        run.publish_latest(ck_path, steps=steps, games=games, it=it)
+        play_path = run.ckpt_path("play.pt")
+        atomic_torch_save({"net": net.state_dict(), "hp": HP}, play_path)
+        run.publish_latest(play_path, steps=steps, games=games, it=it)
 
     if not pool:
         pool.append(copy.deepcopy(net.state_dict()))

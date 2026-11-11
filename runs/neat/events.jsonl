@@ -1,1 +1,2 @@
 {"t": "2026-11-11 22:05", "kind": "run_start", "note": "NEAT, population 120, inputs = the 23 features, 3 outputs. hp={'hof_size': 6, 'n_bot_space': 4, 'n_bot_avoid': 2, 'n_hof_games': 4}"}
+{"t": "2026-11-11 22:10", "kind": "resume", "note": "generation 15"}

@@ -1,6 +1,6 @@
 # Goal: Tron Tournament of 5 ML models (Wed 11 Nov evening → Fri 13 Nov 18:00)
 
-Build and run an overnight-to-Friday tournament in /home/jonas/code/games/tournament on this
+Build and run an overnight-to-Friday tournament in this repo on this
 machine (8 CPU cores, 7.6 GB RAM, no GPU, PyTorch CPU). Five different ML methods learn to play
 Tron light cycles and compete against each other. The best get stopped so the others can catch
 up, the worst get cut, and on Friday evening 3 finalists remain. Everything is visible on a live
