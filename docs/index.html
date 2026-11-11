@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tron Tournament</title>
+<link rel="stylesheet" href="style.css?v=f053e149">
+</head>
+<body>
+<main>
+<header class="hero">
+  <h1>Five learning methods, one Tron arena</h1>
+  <p class="lede">Five different kinds of machine learning (PPO, DQN, NEAT, CMA-ES and a small AlphaZero) teach themselves
+  Tron light cycles on one 8-core laptop, from Wednesday evening until Friday 18:00. Every 30 minutes they all play each
+  other and three fixed bots. A model that pulls more than 100 points ahead stops training until the others catch up.
+  The weakest is knocked out on Thursday at 12:00, the next on Friday at 06:00, and three finalists play the final.</p>
+  <p class="countdown" id="countdown"></p>
+  <p class="muted" id="updated"></p>
+</header>
+<section class="cards" id="cards"></section>
+<section>
+  <h2>Leaderboard</h2>
+  <p class="muted small">Rating on the Elo scale, fitted to the latest ranking round only (each model's newest checkpoint).
+  The space-filler bot is pinned at 1500, so ratings from different rounds can be compared. "Avg 3" is the average of the
+  last three rounds: knockouts use that, so one unlucky round can't decide them.</p>
+  <div class="tablewrap"><table class="t" id="board"></table></div>
+</section>
+<section>
+  <h2>Rating over time</h2>
+  <div class="chartbox"><div class="h tall"><canvas id="chart"></canvas></div></div>
+  <p class="muted small">Dashed lines are the fixed bots. Shaded spans: the leader's training was paused (catch-up rule).</p>
+</section>
+<section>
+  <h2>Who beats whom <span class="muted small" id="h2hnote"></span></h2>
+  <p class="muted small">Score of the row model against the column model in the latest round (win = 1, draw = ½), 20 games per pair, 10 from each side of the mirrored start.</p>
+  <div class="tablewrap"><table class="t h2h" id="h2h"></table></div>
+</section>
+<section>
+  <h2>Best games of the latest round <span class="muted small">GIFs play once; click to watch again</span></h2>
+  <div class="gifs" id="gifs"></div>
+</section>
+<section>
+  <h2>Tournament timeline</h2>
+  <div id="timeline"></div>
+</section>
+</main>
+<footer>Updated automatically every 15 minutes. Every number comes from games actually played; nothing is estimated.</footer>
+<script src="site.js?v=707a4ed6"></script>
+<script src="common.js?v=448bd7f6"></script>
+<script src="project.js?v=13964608"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="competition.js?v=9c4b0524"></script>
+</body>
+</html>

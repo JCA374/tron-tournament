@@ -1,0 +1,19 @@
+{
+  "title": "Tron Tournament",
+  "icon": "🏍️",
+  "repo": "JCA374/tron-tournament",
+  "deadline": "2026-11-13T18:00:00+01:00",
+  "deadline_text": "the final on Friday 13 November, 18:00",
+  "goal": {"metric": "winrate", "target": null, "label": "Win rate", "columns": []},
+  "goal_text": "",
+  "names": {},
+  "tabs": [["index.html", "Competition"], ["log.html", "Log"], ["curriculum.html", "Schedule & rules"],
+           ["senses.html", "How it sees"], ["model.html", "The models"], ["play.html", "Play"],
+           ["speed.html", "Speed"], ["lessons.html", "Lessons"], ["podcast/index.html", "Podcast"]],
+  "chart": {},
+  "cards": [],
+  "alive_pattern": "^.venv/bin/python -m models\\.\\w+ .*--run {run}( |$)",
+  "replay_kinds": ["round_best", "knockout", "lead_change", "final", "champion"],
+  "replay_seed": 3000777000,
+  "push_globs": ["runs/*/stats.csv", "runs/*/events.jsonl", "runs/*/curriculum.json"]
+}

@@ -1,0 +1,110 @@
+:root {
+  --bg: #f7f6f2; --panel: #ffffff; --ink: #1d1d1f; --muted: #6b6b70; --line: #e3e1da;
+  --accent: #3b5bdb; --good: #2f9e44; --warn: #e8590c; --bad: #c92a2a; --band: rgba(59, 91, 219, .06);
+  --code: #f0eee8;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #111215; --panel: #1a1b20; --ink: #ececf1; --muted: #9a9aa3; --line: #2c2d34;
+    --accent: #8ea6ff; --good: #69db7c; --warn: #ffa94d; --bad: #ff8787; --band: rgba(142, 166, 255, .08);
+    --code: #23242b;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #111215; --panel: #1a1b20; --ink: #ececf1; --muted: #9a9aa3; --line: #2c2d34;
+  --accent: #8ea6ff; --good: #69db7c; --warn: #ffa94d; --bad: #ff8787; --band: rgba(142, 166, 255, .08);
+  --code: #23242b;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif; }
+main { max-width: 980px; margin: 0 auto; padding: 0 16px 48px; }
+nav.top { display: flex; gap: 18px; align-items: center; padding: 12px 16px; border-bottom: 1px solid var(--line);
+  background: var(--panel); position: sticky; top: 0; z-index: 5; flex-wrap: wrap; }
+nav.top a { color: var(--muted); text-decoration: none; }
+nav.top a.on, nav.top a:hover { color: var(--ink); }
+nav.top .brand { color: var(--ink); font-weight: 650; margin-right: auto; }
+h1 { font-size: clamp(1.6rem, 4vw, 2.3rem); line-height: 1.2; margin: 32px 0 12px; letter-spacing: -.01em; }
+h2 { margin: 40px 0 8px; font-size: 1.3rem; }
+.lede { font-size: 1.08rem; max-width: 760px; }
+.muted { color: var(--muted); } .small { font-size: .85rem; font-weight: 400; }
+a { color: var(--accent); }
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin-top: 20px; }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; }
+.card .k { color: var(--muted); font-size: .8rem; text-transform: uppercase; letter-spacing: .05em; }
+.card .v { font-size: 1.6rem; font-weight: 650; font-variant-numeric: tabular-nums; }
+.card .s { color: var(--muted); font-size: .85rem; }
+.stage { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 12px 16px; margin: 8px 0;
+  display: grid; grid-template-columns: 34px 1fr; gap: 4px 12px; }
+.stage .n { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; font-weight: 650;
+  background: var(--code); color: var(--muted); }
+.stage.passed .n { background: var(--good); color: var(--panel); }
+.stage.current { border-color: var(--accent); }
+.stage.current .n { background: var(--accent); color: var(--panel); }
+.stage.capped .n { background: var(--warn); color: var(--panel); }
+.stage h3 { margin: 2px 0; font-size: 1.02rem; }
+.stage dl { margin: 0; display: grid; grid-template-columns: max-content 1fr; gap: 2px 10px; font-size: .9rem; }
+.stage dt { color: var(--muted); }
+.stage dd { margin: 0; }
+.chartbox { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 10px; }
+.ev { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 12px 16px; margin: 10px 0;
+  display: flex; gap: 16px; flex-wrap: wrap; }
+.ev .body { flex: 1 1 320px; min-width: 0; }
+.ev .t { color: var(--muted); font-size: .8rem; font-variant-numeric: tabular-nums; }
+.ev h4 { margin: 2px 0 4px; font-size: 1rem; }
+.ev p { margin: 4px 0; white-space: pre-wrap; }
+.ev img { width: 420px; max-width: 100%; border-radius: 8px; border: 1px solid var(--line); background: #000; }
+.tag { display: inline-block; font-size: .72rem; padding: 1px 8px; border-radius: 99px; margin-right: 6px;
+  background: var(--code); color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+.tag.stage_pass, .tag.goal_check { background: var(--good); color: var(--panel); }
+.tag.new_best { background: var(--accent); color: var(--panel); }
+.tag.journal { background: var(--ink); color: var(--panel); }
+.tag.stage_cap { background: var(--warn); color: var(--panel); }
+.lesson { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 4px 20px 16px; margin: 16px 0; }
+code { background: var(--code); padding: 1px 5px; border-radius: 4px; font-size: .9em; }
+footer { max-width: 980px; margin: 0 auto; padding: 24px 16px 40px; color: var(--muted); font-size: .85rem; border-top: 1px solid var(--line); }
+table.t { border-collapse: collapse; width: 100%; background: var(--panel); border: 1px solid var(--line); border-radius: 12px;
+  overflow: hidden; font-size: .92rem; font-variant-numeric: tabular-nums; }
+table.t th, table.t td { padding: 7px 10px; border-bottom: 1px solid var(--line); text-align: left; }
+table.t th { color: var(--muted); font-weight: 600; font-size: .8rem; text-transform: uppercase; letter-spacing: .04em; }
+table.t tr:last-child td { border-bottom: 0; }
+table.t td.num { text-align: right; }
+.tablewrap { overflow-x: auto; }
+.countdown { font-size: 1.05rem; font-weight: 600; }
+.box { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 4px 20px 14px; margin: 14px 0; }
+.box h3 { margin: 14px 0 6px; }
+.chartbox .h { position: relative; height: 300px; }
+pre { background: var(--code); padding: 10px 12px; border-radius: 8px; overflow-x: auto; font-size: .85rem; }
+.tag.goal_best { background: var(--accent); color: var(--panel); }
+.tag.crash { background: var(--bad); color: var(--panel); }
+.bar { height: 10px; border-radius: 5px; background: var(--accent); display: inline-block; vertical-align: middle; }
+/* Play tab */
+.picker { display: flex; gap: 8px; flex-wrap: wrap; margin: 10px 0; }
+.picker button { border: 1px solid var(--line); background: var(--panel); color: var(--ink); border-radius: 99px; padding: 6px 14px;
+  cursor: pointer; font: inherit; font-size: .92rem; }
+.picker button.on { background: var(--accent); color: var(--panel); border-color: var(--accent); }
+.player { background: #000; border-radius: 12px; overflow: hidden; border: 1px solid var(--line); }
+.player video { width: 100%; display: block; aspect-ratio: 3 / 2; background: #000; }
+.games { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 10px; margin-top: 14px; }
+.game { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; cursor: pointer; text-align: left;
+  color: var(--ink); font: inherit; }
+.game.on { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent) inset; }
+.game .ttl { font-weight: 650; } .game .d { color: var(--muted); font-size: .82rem; }
+.badge { display: inline-block; font-size: .72rem; padding: 1px 8px; border-radius: 99px; margin-top: 6px; }
+.badge.ok { background: var(--good); color: var(--panel); } .badge.bad { background: var(--bad); color: var(--panel); }
+.cmp { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; }
+.cmp figure { margin: 0; } .cmp video { width: 100%; border-radius: 8px; background: #000; } .cmp figcaption { font-size: .82rem; color: var(--muted); }
+.ev img { cursor: pointer; }
+/* Tron tournament */
+.chartbox .h.tall { height: 380px; }
+.dot { display: inline-block; width: 11px; height: 11px; border-radius: 50%; margin-right: 7px; vertical-align: baseline; }
+tr.bot td { color: var(--muted); }
+.badge.warn { background: var(--warn); color: var(--panel); }
+.badge { margin-top: 0; background: var(--code); color: var(--muted); }
+table.h2h td, table.h2h th { text-align: center; }
+.gifs { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+.gifs figure { margin: 0; } .gifs img { width: 100%; border-radius: 8px; border: 1px solid var(--line); cursor: pointer; background: #000; }
+.gifs figcaption { font-size: .82rem; color: var(--muted); }
+.tag.knockout { background: var(--bad); color: var(--panel); }
+.tag.lead_change, .tag.round_best { background: var(--accent); color: var(--panel); }
+.tag.pause, .tag.change { background: var(--warn); color: var(--panel); }
+.tag.final, .tag.resume_training { background: var(--good); color: var(--panel); }

@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+*.pyc
+logs/
+runs/*/ckpt/
+runs/*/snapshots/
+runs/*/*.pt
+runs/*/*.pkl
+*.pid
+results/replays/
+results/snapshots/
