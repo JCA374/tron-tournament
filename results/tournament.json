@@ -1,42 +1,42 @@
 {
  "started": "2026-11-11T22:05:46.312792+01:00",
- "round": 2,
- "next_round_at": 1794435976.8869941,
+ "round": 3,
+ "next_round_at": 1794437782.5899332,
  "models": {
   "ppo": {
    "status": "training",
    "cpus": "0",
    "cores": 1,
    "started_at": 1794431406.7766094,
-   "train": "9.9 M steps \u00b7 92 k games"
+   "train": "12.4 M steps \u00b7 106 k games"
   },
   "dqn": {
    "status": "training",
    "cpus": "1",
    "cores": 1,
    "started_at": 1794431406.8226235,
-   "train": "4.0 M steps \u00b7 102 k games"
+   "train": "5.2 M steps \u00b7 112 k games"
   },
   "neat": {
    "status": "training",
    "cpus": "2",
    "cores": 1,
    "started_at": 1794431406.8604777,
-   "train": "generation 143 \u00b7 171 k games"
+   "train": "generation 177 \u00b7 212 k games"
   },
   "cmaes": {
    "status": "training",
    "cpus": "3",
    "cores": 1,
    "started_at": 1794431406.9353652,
-   "train": "generation 503 \u00b7 161 k games"
+   "train": "generation 606 \u00b7 194 k games"
   },
   "az": {
    "status": "training",
    "cpus": "4",
    "cores": 1,
    "started_at": 1794431508.9267266,
-   "train": "592 self-play games"
+   "train": "704 self-play games"
   }
  },
  "pauses": [],
@@ -45,5 +45,5 @@
  "leader": "ppo",
  "restarts": {},
  "note": "",
- "processed_round": 2
+ "processed_round": 3
 }
