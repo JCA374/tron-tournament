@@ -1,0 +1,5 @@
+["Tournament started Wed 11 Nov 22:05 after a restart (a supervisor bug started ~50 duplicate trainers)",
+ "Round 1 (22:36): CMA-ES 1658, PPO 1637, Mini-AlphaZero 1637, NEAT 1590, space-filler bot 1500, DQN 1351",
+ "Rock-paper-scissors: CMA-ES beats PPO 60%, AlphaZero beats CMA-ES 60%, NEAT beats AlphaZero 70%",
+ "AlphaZero had played under 300 self-play games, the others 60-90 thousand",
+ "First knockout: Thursday 12:00"]

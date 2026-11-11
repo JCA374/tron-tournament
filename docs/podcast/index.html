@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Project Podcast</title>
+<style>
+  :root { --bg:#fafaf7; --surface:#fff; --text:#1d1d1b; --muted:#6b6b66; --line:#e3e2dc; --accent:#f2b134; --blue:#2f6fd0; --shadow:0 1px 3px rgba(0,0,0,.06); }
+  @media (prefers-color-scheme: dark) { :root { --bg:#15161a; --surface:#1e2026; --text:#e8e6e1; --muted:#9a988f; --line:#2e3038; --blue:#7fb0ff; } }
+  body { background:var(--bg); color:var(--text); font:17px/1.6 system-ui, sans-serif; margin:0; }
+  .wrap { max-width:760px; margin:0 auto; padding:24px 16px; } .lede { color:var(--muted); }
+  a { color:var(--blue); } .btn { border:1px solid var(--line); background:var(--surface); color:var(--text); border-radius:8px; padding:4px 10px; cursor:pointer; }
+  .ep { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 18px 20px; margin: 18px 0; box-shadow: var(--shadow); }
+  .ep h2 { margin: 2px 0 2px; font-size: 22px; }
+  .ep .meta { color: var(--muted); font-size: 14px; }
+  .ep audio { width: 100%; margin: 12px 0 6px; }
+  .speeds { display: flex; gap: 6px; flex-wrap: wrap; }
+  .speeds button.on { background: var(--accent); color: #111; border-color: var(--accent); }
+  details { margin-top: 10px; } summary { cursor: pointer; color: var(--blue); }
+  .transcript p { margin: 0 0 12px; }
+</style>
+</head>
+<body data-root="..">
+<header class="wrap" style="padding-bottom:0"><a href="../index.html">&larr; Home</a></header>
+<main class="wrap narrow">
+  <div class="hero" style="padding-bottom:0">
+    <h1>The project <em>podcast</em></h1>
+    <p class="lede">Short spoken updates: what we're trying, what worked, what failed, and what's next.</p>
+  </div>
+  <div id="eps"><p class="note">Loading…</p></div>
+</main>
+<footer class="wrap narrow">Narrated with Kokoro (local text-to-speech), checked with Whisper.</footer>
+<script>
+fetch("../data/podcast.json", { cache: "no-store" }).then(r => r.json()).then(d => {
+  document.getElementById("eps").innerHTML = d.episodes.length ? d.episodes.map(e => `
+    <div class="ep"><div class="meta">Episode ${e.n} · ${e.date} · ${e.minutes} min</div><h2>${e.title.replace(/^Episode \d+:\s*/, "")}</h2>
+      <audio controls preload="metadata" src="${e.mp3}"></audio>
+      <div class="speeds">${[1, 1.25, 1.5].map(s => `<button class="btn${s === 1 ? " on" : ""}" data-s="${s}">${s}×</button>`).join("")}</div>
+      ${e.notes.length ? `<h3 style="font-size:16px;margin:14px 0 4px">In this episode</h3><ul>${e.notes.map(n => `<li>${n}</li>`).join("")}</ul>` : ""}
+      <details><summary>Transcript</summary><div class="transcript">${e.transcript.map(p => `<p>${p}</p>`).join("")}</div></details>
+    </div>`).join("") : "<p>No episodes yet.</p>";
+  document.querySelectorAll(".ep").forEach(ep => ep.querySelectorAll(".speeds button").forEach(b => b.onclick = () => {
+    ep.querySelector("audio").playbackRate = +b.dataset.s;
+    ep.querySelectorAll(".speeds button").forEach(x => x.classList.toggle("on", x === b));
+  }));
+});
+</script>
+</body>
+</html>

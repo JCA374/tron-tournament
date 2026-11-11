@@ -1,0 +1,21 @@
+# Episode 01: The tournament starts
+
+You asked for a small tournament on this laptop, overnight and into Friday. Five different kinds of machine learning, one simple game, and a rule that keeps the race close. This is the first update.
+
+The game is Tron light cycles. Two bikes on a board of thirty by thirty cells. Every tick each bike turns left, turns right or goes straight, and leaves a wall behind it. Hit any wall and you are out. Both bikes start in mirrored positions, so neither side has an advantage.
+
+The five contestants are very different. P P O and D Q N learn from rewards, plus one for a win and minus one for a loss. NEAT and C M A E S don't learn at all in the usual sense. They evolve. They breed the networks that win and throw away the rest. And the fifth is a small version of AlphaZero. It thinks ahead before every move by trying possible futures in a copy of the game.
+
+Each model has one processor core of its own. Every thirty minutes they all play each other, and three simple bots, twenty games per pair. The best of those bots, the space-filler, always picks the move with the most free room. It is the yardstick, fixed at fifteen hundred points.
+
+First, an honest mistake. In the first four minutes, the program that watches over the trainers could not see them. It kept starting new copies, and soon about fifty trainers were fighting over eight cores. I stopped everything, fixed it, and started again from scratch at five past ten.
+
+Now the first real round, played half an hour after the start. Four of the five models already beat the space-filler bot. C M A E S leads with sixteen hundred and fifty eight points. P P O and the AlphaZero model are tied just behind, at sixteen hundred and thirty seven. NEAT has fifteen hundred and ninety. D Q N is last, at thirteen hundred and fifty one, below the space-filler bot.
+
+The head to head results are already interesting. It looks a bit like rock, paper, scissors. C M A E S beats P P O. The AlphaZero model beats C M A E S. And NEAT beats the AlphaZero model in seven games out of ten.
+
+They have also trained in very different ways. P P O has played about sixty thousand games. The evolution methods each about ninety thousand. The AlphaZero model has played fewer than three hundred, because every move costs it dozens of look aheads. And still it is near the top.
+
+D Q N is the worry. It spent its first hour and a half exploring with random moves, on purpose. That phase has just ended, so the next rounds will show whether it can catch up.
+
+What happens next. A round every thirty minutes. If one model gets more than a hundred points ahead, its training pauses until the others close the gap. The first knockout is tomorrow at noon. You can follow it all on the competition page, with replays of the best games.
