@@ -3,19 +3,74 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Curriculum</title>
-<link rel="stylesheet" href="style.css?v=f053e149">
+<title>Schedule & rules</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 <main>
-<h1>Curriculum</h1>
-<p class="lede">Every run's stages: the world, the reward, the check that ends the stage, the cap and the expected outcome, written down <i>before</i> the stage starts.</p>
-<!-- WRITE: a box with what earlier projects taught about curricula for this task -->
-<div id="runs"></div>
+<h1>Schedule &amp; rules</h1>
+<p class="lede">There's no curriculum in this project: every model learns the full game from the start. What changes over
+time is the competition itself: who's still in, who's paused, and how much CPU each model gets.</p>
+
+<h2>The game</h2>
+<div class="box">
+<ul>
+<li>A 30 × 30 board with a wall around it. Each tick, every bike turns left, goes straight or turns right, then moves one cell and leaves a permanent trail.</li>
+<li>A bike that moves into a wall or any trail (its own included) is out. Two bikes moving into the same cell are both out.</li>
+<li>Last bike alive wins. If the last bikes die on the same tick it's a draw (and after 900 ticks, which can't really happen on 900 cells).</li>
+<li><b>Fair starts:</b> in 1v1 the second bike starts at the exact 180° rotation of the first, facing the opposite way. The board is then identical from both sides, and every start position is played twice, with the two models swapping sides.</li>
+</ul>
+</div>
+
+<h2>Timeline</h2>
+<div id="sched"></div>
+
+<h2>Ranking rounds</h2>
+<div class="box">
+<p>Every 30 minutes the newest checkpoint of every model still in is <b>frozen</b> and plays everyone else, including three
+fixed bots: <b>random</b>, <b>avoid-walls</b> (a random move that doesn't crash this tick) and <b>space-filler</b> (always the move
+with the most reachable free cells). That's 20 games per pair (10 start positions × both sides), 560 games in a round with all five models.</p>
+<p>Ratings come from a <b>Bradley–Terry</b> fit (the model behind Elo) to that round's games only, with a draw counted as half a win.
+Since the bots never change, the space-filler bot is pinned at 1500 and the ratings of different rounds are on the same scale.</p>
+</div>
+
+<h2>The catch-up rule</h2>
+<div class="box">
+<p>The leader is the model with the best average rating over the last two rounds. If it's more than <b>100 points</b> ahead of
+number two, its training is <b>paused</b>. It still plays every round with the checkpoint it had. As soon as its lead is under
+<b>50 points</b>, it trains again. On the Competition page the paused spans are shaded in the model's colour.</p>
+</div>
+
+<h2>Knockouts and the final</h2>
+<div class="box">
+<p>At each knockout, the model with the lowest average rating over the <b>last three rounds</b> is out. Its last checkpoint
+stays on the site, and its CPU core goes to the others:</p>
+<table class="t"><tr><th>Models in</th><th>Training cores each</th><th>Ranking rounds &amp; website</th></tr>
+<tr><td>5</td><td>1 (cores 0–4)</td><td>cores 5–7</td></tr>
+<tr><td>4</td><td>2 (cores 0–7)</td><td>shared, at low priority</td></tr>
+<tr><td>3</td><td>2 (cores 0–5)</td><td>cores 6–7</td></tr></table>
+<p>At Friday 16:00 training stops. The three finalists play <b>200 games per pair</b> and <b>50 three-bike free-for-all games</b>.
+The winner is the top of the final 1v1 ratings; the free-for-all result is reported next to it.</p>
+</div>
+
+<h2>What I may change during the tournament</h2>
+<div class="box">
+<p>The goal is that every method plays as well as it can in the time it has, so the result says something about the methods and
+not about a bad first setup. Allowed: hyperparameters, network size, learning rate, reward shaping, opponent pool, exploration,
+search simulations, population size and bug fixes. Not allowed: switching a model to another method, copying weights between
+models, or giving one model more CPU than its share. Every change is in the Log with the reason and the result.</p>
+</div>
 </main>
-<script src="site.js?v=707a4ed6"></script>
-<script src="common.js?v=448bd7f6"></script>
-<script src="project.js?v=13964608"></script>
-<script src="curriculum.js?v=9a10b8a4"></script>
+<script src="site.js"></script>
+<script src="common.js"></script>
+<script src="project.js"></script>
+<script>
+(async function () {
+  const c = await get('competition.json');
+  const s = (c && c.schedule) || [];
+  const rows = [['Wed 11 Nov, 22:00', 'Training starts; first ranking round after 20 minutes, then every 30 minutes'], ...s.map((x) => [new Date(x.t).toLocaleString([], { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }), x.label])];
+  $('sched').innerHTML = '<table class="t"><tr><th>When</th><th>What</th></tr>' + rows.map(([a, b]) => `<tr><td>${esc(a)}</td><td>${esc(b)}</td></tr>`).join('') + '</table>';
+})();
+</script>
 </body>
 </html>

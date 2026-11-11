@@ -1,42 +1,42 @@
 {
- "started": "2026-11-11T22:01:38.202165+01:00",
+ "started": "2026-11-11T22:05:46.312792+01:00",
  "round": 0,
- "next_round_at": 1794432098.2022548,
+ "next_round_at": 1794432346.3128161,
  "models": {
   "ppo": {
    "status": "training",
    "cpus": "0",
    "cores": 1,
-   "started_at": 1794430898.2102084,
-   "train": "starting"
+   "started_at": 1794431146.3527799,
+   "train": "319 k steps \u00b7 18 k games"
   },
   "dqn": {
    "status": "training",
    "cpus": "1",
    "cores": 1,
-   "started_at": 1794430898.2164347,
-   "train": "starting"
+   "started_at": 1794431146.3714302,
+   "train": "149 k steps \u00b7 25 k games"
   },
   "neat": {
    "status": "training",
    "cpus": "2",
    "cores": 1,
-   "started_at": 1794430898.2231185,
-   "train": "starting"
+   "started_at": 1794431146.389995,
+   "train": "generation 11 \u00b7 13 k games"
   },
   "cmaes": {
    "status": "training",
    "cpus": "3",
    "cores": 1,
-   "started_at": 1794430898.2301445,
-   "train": "starting"
+   "started_at": 1794431146.4152126,
+   "train": "generation 41 \u00b7 13 k games"
   },
   "az": {
    "status": "training",
    "cpus": "4",
    "cores": 1,
-   "started_at": 1794430898.2382135,
-   "train": "starting"
+   "started_at": 1794431146.4335744,
+   "train": "32 self-play games"
   }
  },
  "pauses": [],

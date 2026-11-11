@@ -1,0 +1,1 @@
+{"t": "2026-11-11 22:05", "kind": "run_start", "note": "PPO, 64 parallel games, self-play vs a pool of old snapshots + bots. hp={'n_envs': 64, 'n_steps': 128, 'gamma': 0.99, 'lam': 0.95, 'clip': 0.2, 'lr': 0.0003, 'ent': 0.01, 'vf': 0.5, 'epochs': 4, 'minibatch': 1024, 'snapshot_every': 25, 'pool_size': 12, 'p_bot_space': 0.15, 'p_bot_avoid': 0.05, 'hidden': 128}"}

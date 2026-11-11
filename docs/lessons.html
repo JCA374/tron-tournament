@@ -4,17 +4,35 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Lessons</title>
-<link rel="stylesheet" href="style.css?v=f053e149">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 <main>
 <h1>Lessons</h1>
-<p class="lede">What this project and earlier ones taught. Newest first.</p>
-<div class="box"><h3>From this project</h3><ul id="new"><!-- add lessons as they are learned --></ul></div>
-</main>
-<script src="site.js?v=707a4ed6"></script>
-<script src="common.js?v=448bd7f6"></script>
-<script src="project.js?v=13964608"></script>
+<p class="lede">What this tournament taught, written down as it happens, newest first. Some are about the methods,
+some about running a two-day experiment unattended.</p>
 
+<div class="lesson"><h3>A process watcher must be tested against itself</h3>
+<p>Wednesday 22:01–22:05. The supervisor checks with <code>pgrep -f</code> whether each trainer is running. Its pattern began with
+<code>-m models…</code>, and pgrep read that as one of its own options, so it never found a trainer and started a new copy of
+all five every 20 seconds. After four minutes about 50 trainers were sharing 8 cores and writing to the same files.</p>
+<p><b>Fix:</b> the pattern is anchored on the full interpreter path, and the supervisor now refuses to run two trainers for
+one model. <b>Lesson:</b> start the watcher, wait two of its cycles, and count the processes before walking away.</p></div>
+
+<div class="lesson"><h3>On a CPU, a small MLP beats a small CNN</h3>
+<p>The first network was a 3-layer CNN over the 15 × 15 window. One training step on 1,024 positions took 345 ms on one core;
+an MLP over the same 675 values plus the 23 numbers takes 39 ms. Convolutions on tiny inputs don't use the CPU's
+matrix-multiply speed well. With only one core per model, that 9× difference is worth more than the CNN's built-in sense of
+space.</p></div>
+
+<div class="lesson"><h3>Tree search starts far ahead</h3>
+<p>In a 2-minute test before the start, Mini-AlphaZero, with 16 self-play games behind it, was already level with the
+space-filler bot. The other four, with thousands of games each, were 130–330 points below it. Searching with an exact copy of
+the rules finds immediate traps without learning anything. The question for the next two days: do the learners catch up
+once they've learned what the search sees for free?</p></div>
+</main>
+<script src="site.js"></script>
+<script src="common.js"></script>
+<script src="project.js"></script>
 </body>
 </html>

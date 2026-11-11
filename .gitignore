@@ -9,3 +9,7 @@ runs/*/*.pkl
 *.pid
 results/replays/
 results/snapshots/
+voice/*/audio/
+voice/*/cache/
+*.wav
+podcast/publish_*.log

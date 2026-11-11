@@ -3,17 +3,101 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The model</title>
-<link rel="stylesheet" href="style.css?v=f053e149">
+<title>The models</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 <main>
-<h1>The model</h1>
-<p class="lede"><!-- WRITE: very educational, with examples: what the model is (a diagram), how it learns, what it is paid for, how it changed over time. Embed films here (video controls, never loop). --></p>
-</main>
-<script src="site.js?v=707a4ed6"></script>
-<script src="common.js?v=448bd7f6"></script>
-<script src="project.js?v=13964608"></script>
+<h1>The five contestants</h1>
+<p class="lede">Five different answers to the same question: how can a program get good at a game nobody explained to it?
+Two learn from rewards (PPO, DQN), two evolve (NEAT, CMA-ES), and one plans ahead with search (Mini-AlphaZero). Each gets the
+same observation (see <a href="senses.html">How it sees</a>), the same CPU share and the same two days. Below each description
+is its own training curve, straight from its log file.</p>
 
+<div class="box" id="ppo"><h3><span class="dot" style="background:#4c6ef5"></span>PPO: Proximal Policy Optimization</h3>
+<p><b>What it is:</b> a neural network (the 675 window values + 23 numbers → 256 → 128 → 3 move probabilities + 1 value estimate)
+that plays 64 games at once. After every 128 moves in each game (8,192 moves), it nudges the network so moves that turned out better than
+expected become more likely, and those that turned out worse less likely. The "proximal" part: no move's probability may change
+by more than 20% in one update, which keeps learning stable.</p>
+<p><b>What it's paid for:</b> +1 for a win, −1 for a loss, 0 for a draw. Nothing else: no reward for surviving or for space.</p>
+<p><b>Who it plays:</b> 80% of the time an older copy of itself (a pool of the last 12 snapshots, one saved every 25 updates), 15%
+the space-filler bot and 5% the avoid-walls bot. Playing old selves rather than only the newest avoids going in circles.</p>
+<p><b>Expected:</b> steady, reliable progress; it's the method most game-playing RL starts from.</p>
+<div class="chartbox"><div class="h"><canvas id="c_ppo"></canvas></div></div></div>
+
+<div class="box" id="dqn"><h3><span class="dot" style="background:#f76707"></span>DQN: Deep Q-Network (double, dueling, 3-step)</h3>
+<p><b>What it is:</b> the same size of network, but it outputs a <i>value</i> for each move: "how much will I win from here if I go
+left / straight / right?". It plays the move with the highest value, except a shrinking fraction of random moves (100% at the
+start, 3% after 1.5 M moves) to keep exploring.</p>
+<p><b>How it learns:</b> every move goes into a memory of the last 150,000. After each step of its 32 games it re-studies 256 random
+memories, so it learns from the same experience many times, unlike PPO. <i>Double</i>: a slow-moving copy of the
+network judges the next position, which stops it fooling itself with over-optimistic values. <i>Dueling</i>: the network learns
+"how good is this position" and "how much better is each move" separately. <i>3-step</i>: it looks at the actual rewards over the next three
+moves before trusting its own estimate.</p>
+<p><b>Who it plays:</b> like PPO, old copies of itself and the bots. <b>Expected:</b> very efficient with experience but can be unstable.</p>
+<div class="chartbox"><div class="h"><canvas id="c_dqn"></canvas></div></div></div>
+
+<div class="box" id="neat"><h3><span class="dot" style="background:#37b24d"></span>NEAT: NeuroEvolution of Augmenting Topologies</h3>
+<p><b>What it is:</b> a population of 120 tiny networks. They start with only direct connections from the 23 numbers to the 3 moves,
+and evolution may <b>add neurons and connections</b> over time. There's no gradient and no backpropagation: networks that win more games have
+more children, and children are mutated copies (weights changed, a connection added, a neuron inserted, or crossovers of two parents).</p>
+<p><b>Species:</b> networks are grouped by how similar their structure is, and compete mostly within their group. A new structural
+idea gets a few generations to prove itself before it has to beat the established champions.</p>
+<p><b>Fitness:</b> each network plays 10 games per generation: 4 against space-filler, 2 against avoid-walls, and 4 against the last six generations' champions
+(the same games for everyone, so it's a fair comparison). Score: win 1, draw ½, plus a tiny bonus for surviving long.</p>
+<p><b>Expected:</b> a slow start, odd-looking playing styles, and networks small enough to read.</p>
+<div class="chartbox"><div class="h"><canvas id="c_neat"></canvas></div></div></div>
+
+<div class="box" id="cmaes"><h3><span class="dot" style="background:#ae3ec9"></span>CMA-ES: Covariance Matrix Adaptation Evolution Strategy</h3>
+<p><b>What it is:</b> a fixed small network (23 numbers → 32 neurons → 3 moves, 899 weights). Instead of one network it keeps a
+<i>cloud</i> of possible weight settings: a centre and a shape. Each generation it samples 32 networks from the cloud, has them play the
+same 10 games as NEAT, then moves the centre toward the winners and <b>stretches the cloud in the directions that worked</b>. That
+"covariance" is what makes it smart: it learns which weights should change together.</p>
+<p><b>Expected:</b> robust and cautious play; often surprisingly strong on small networks. Its playing model is always the
+cloud's centre.</p>
+<div class="chartbox"><div class="h"><canvas id="c_cmaes"></canvas></div></div></div>
+
+<div class="box" id="az"><h3><span class="dot" style="background:#f03e3e"></span>Mini-AlphaZero: tree search + a learned network</h3>
+<p><b>What it is:</b> before every move it <b>thinks ahead</b>. It builds a tree of possible futures by trying moves in a copy of the game
+(48 simulations per move while training, 32 in the tournament). A network (same shape as PPO's) suggests which moves are worth
+exploring and guesses who's winning in positions it doesn't search further.</p>
+<p><b>The twist for Tron:</b> chess and Go are turn-based, but here both bikes move at once. So each position in the tree keeps
+separate statistics for each bike ("decoupled" search), and the next position depends on <i>both</i> bikes' moves.</p>
+<p><b>How it learns:</b> only from self-play. After each game the network is trained to predict (a) the moves the search ended up
+preferring and (b) who won. Better network → better search → better training data.</p>
+<p><b>Expected:</b> strong from the start, because search with an exact copy of the rules catches immediate traps. But every move costs
+~32 network calls, so it plays far fewer games than the others (about 1,200 an hour on one core, against PPO's ~15,000).</p>
+<div class="chartbox"><div class="h"><canvas id="c_az"></canvas></div></div></div>
+
+<h2>The yardsticks</h2>
+<table class="t"><tr><th>Bot</th><th>How it plays</th></tr>
+<tr><td>Random</td><td>uniformly random moves, including suicide</td></tr>
+<tr><td>Avoid-walls</td><td>never crashes on this tick if it can help it; 60% straight, otherwise a random safe turn</td></tr>
+<tr><td>Space-filler</td><td>always the move with the most reachable free cells (ties: straight). Pinned at 1500 in the ratings.</td></tr></table>
+</main>
+<script src="site.js"></script>
+<script src="common.js"></script>
+<script src="project.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+(async function () {
+  const st = await get('stats.json');
+  if (!st || !window.Chart) return;
+  const spec = { ppo: ['steps', 1e-6, 'million moves', [['win_vs_self', 'win % vs old self'], ['win_vs_space', 'win % vs space-filler']], 100],
+    dqn: ['steps', 1e-6, 'million moves', [['win_vs_self', 'win % vs old self'], ['win_vs_space', 'win % vs space-filler']], 100],
+    neat: ['gen', 1, 'generation', [['best_fit', 'best fitness'], ['mean_fit', 'mean fitness']], 1],
+    cmaes: ['gen', 1, 'generation', [['best_fit', 'best fitness'], ['mean_fit', 'mean fitness']], 1],
+    az: ['games', 1e-3, 'thousand self-play games', [['value_loss', 'value loss'], ['policy_loss', 'policy loss']], 1] };
+  const cols = ['--accent', '--warn'];
+  for (const [id, [xk, xs, xl, ser, sc]] of Object.entries(spec)) {
+    const rows = st[id] || [];
+    if (!rows.length) continue;
+    new Chart($('c_' + id), { type: 'line', data: { datasets: ser.map(([k, l], i) => ({ label: l, borderColor: cssv(cols[i]), backgroundColor: cssv(cols[i]),
+      pointRadius: 0, borderWidth: 1.5, data: rows.filter((r) => r[k] !== '' && r[k] != null).map((r) => ({ x: +r[xk] * xs, y: +r[k] * sc })) })) },
+      options: { animation: false, maintainAspectRatio: false, scales: { x: { type: 'linear', title: { display: true, text: xl, color: cssv('--muted') }, ticks: { color: cssv('--muted') }, grid: { color: cssv('--line') } },
+        y: { ticks: { color: cssv('--muted') }, grid: { color: cssv('--line') } } }, plugins: { legend: { labels: { color: cssv('--ink'), boxWidth: 12 } } } } });
+  }
+})();
+</script>
 </body>
 </html>

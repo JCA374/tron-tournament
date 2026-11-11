@@ -4,16 +4,54 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Speed</title>
-<link rel="stylesheet" href="style.css?v=f053e149">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 <main>
 <h1>Speed</h1>
-<p class="lede"><!-- WRITE: the machine (nproc, RAM, GPU), profiles, and before/after timings of each optimisation, measured end to end. --></p>
-</main>
-<script src="site.js?v=707a4ed6"></script>
-<script src="common.js?v=448bd7f6"></script>
-<script src="project.js?v=13964608"></script>
+<p class="lede">One laptop: 8 CPU cores, 7.6 GB of memory, no GPU. Every model trains on its own pinned core(s), so how fast
+each one is matters as much as how clever it is.</p>
 
+<h2>Live: how fast each model trains right now</h2>
+<div class="tablewrap"><table class="t" id="live"></table></div>
+<p class="muted small">From each model's own log (the newest row). Moves = single bike moves in training games.</p>
+
+<h2>Measured before the start (one core each)</h2>
+<table class="t">
+<tr><th>What</th><th>Time</th><th>Note</th></tr>
+<tr><td>One game tick (simulator, numba)</td><td class="num">2.5 µs</td><td>≈ 400,000 ticks per second per core</td></tr>
+<tr><td>One observation (window + 23 numbers)</td><td class="num">65 µs</td><td>4 breadth-first searches over the board; the biggest cost for everyone</td></tr>
+<tr><td>Space-filler bot move</td><td class="num">48 µs</td><td>3 flood fills</td></tr>
+<tr><td>Network forward, 64 positions (MLP)</td><td class="num">1.5 ms</td><td></td></tr>
+<tr><td>Network training step, 1,024 positions (MLP)</td><td class="num">39 ms</td><td></td></tr>
+<tr><td>Same with the first-choice small CNN</td><td class="num">345 ms</td><td>9× slower on CPU, so all networks became MLPs</td></tr>
+<tr><td>A ranking round (560 games, 3 cores)</td><td class="num">≈ 6 min</td><td>mostly Mini-AlphaZero's tree search: 32 simulations a move</td></tr>
+</table>
+
+<h2>Training throughput at the start</h2>
+<table class="t">
+<tr><th>Model</th><th>Speed on one core</th></tr>
+<tr><td>PPO</td><td>≈ 2,000 moves/s</td></tr>
+<tr><td>DQN</td><td>≈ 1,000 moves/s (it also trains after every step)</td></tr>
+<tr><td>NEAT</td><td>≈ 15 s per generation (120 networks × 10 games)</td></tr>
+<tr><td>CMA-ES</td><td>≈ 4 s per generation (32 networks × 10 games)</td></tr>
+<tr><td>Mini-AlphaZero</td><td>≈ 1,200 self-play games/hour (48 simulations per move, 16 games in parallel)</td></tr>
+</table>
+</main>
+<script src="site.js"></script>
+<script src="common.js"></script>
+<script src="project.js"></script>
+<script>
+(async function () {
+  const [st, c] = await Promise.all([get('stats.json'), get('competition.json')]);
+  if (!st) return;
+  const cores = {};
+  ((c && c.models) || []).forEach((m) => { cores[m.id] = m; });
+  const f = (r) => r.sps ? `${(+r.sps).toLocaleString()} moves/s` : r.sec_per_gen ? `${r.sec_per_gen} s per generation` : r.games_per_hour ? `${(+r.games_per_hour).toLocaleString()} games/hour` : '–';
+  $('live').innerHTML = '<tr><th>Model</th><th>Speed</th><th>Progress</th><th>Last log row</th></tr>' +
+    ['ppo', 'dqn', 'neat', 'cmaes', 'az'].filter((k) => st[k] && st[k].length).map((k) => { const r = st[k][st[k].length - 1];
+      return `<tr><td>${esc(runLabel(k))}</td><td>${esc(f(r))}</td><td>${esc((cores[k] || {}).train || '')}</td><td class="small muted">${esc(r.time)}</td></tr>`; }).join('');
+})();
+</script>
 </body>
 </html>

@@ -4,16 +4,64 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>How it sees</title>
-<link rel="stylesheet" href="style.css?v=f053e149">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 <main>
-<h1>How it sees</h1>
-<p class="lede"><!-- WRITE: every input the model gets, what it is, and the rule that it only sees what it may (with the test that checks it). A table of inputs, an example frame with the hidden state drawn for the viewer. --></p>
-</main>
-<script src="site.js?v=707a4ed6"></script>
-<script src="common.js?v=448bd7f6"></script>
-<script src="project.js?v=13964608"></script>
+<h1>How the models see the board</h1>
+<p class="lede">All five models get the <b>same observation</b>, computed by the same code. A model may use less of it (NEAT and
+CMA-ES read only the 23 numbers), but never more. Mini-AlphaZero is the one exception: tree search plays possible futures
+forward, so it also uses the game's rules as a simulator. That's what the method is.</p>
 
+<h2>A position</h2>
+<p>Tick 40 of a game between two avoid-walls bots. You're blue; the white square with the blue border is your head, and the
+orange bike is two cells straight ahead of you.</p>
+<p><img src="img/senses_board.png" alt="a Tron board at tick 40" style="max-width:360px;width:100%;border-radius:8px"></p>
+
+<h2>1. A 15 × 15 window, rotated so you always face up</h2>
+<p>The window is centred on your head (white outline) and <b>turned with the bike</b>, so "up" always means "straight ahead"
+and the three actions always mean the same thing: left, straight, right. Cells outside the board count as obstacles.
+Three layers:</p>
+<p><img src="img/senses_window.png" alt="the three 15x15 observation layers" style="width:100%;border-radius:8px"></p>
+<p class="muted small">Left: everything that kills you (walls and all trails). Middle: your own trail only. Right: other bikes' heads
+(the opponent two cells ahead). The window shows 15 × 15 of the 30 × 30 board; the numbers below cover the rest.</p>
+
+<h2>2. Twenty-three numbers about the whole board</h2>
+<div class="tablewrap"><table class="t" id="feats"></table></div>
+<div class="box">
+<h3>What "free cells" and "territory" mean</h3>
+<p><b>Free cells if left/straight/right:</b> how many empty cells you could still reach (flood fill) after that move, as a
+share of the 900 cells. 0 means the move crashes immediately. Late in a game this is the difference between living and dying:
+if you enter a pocket of 12 cells, you have at most 12 ticks left.</p>
+<p><b>Territory:</b> after that move, the cells you'd reach before the opponent minus the cells the opponent reaches first
+(a Voronoi split of the board, from breadth-first search on both sides), as a share of 900. It's the classic heuristic of strong Tron bots:
+claim more space than the opponent, then cut them off.</p>
+<p><b>Walled off:</b> 1 when you can no longer reach any cell the opponent can reach. From then on the game is only about
+filling your own area efficiently.</p>
+<p>These numbers make the game much easier to learn, and they also make the <b>space-filler bot</b> a fair yardstick: it uses
+nothing but "free cells", always picking the largest. Beating it means a model learned more than one of its 23 inputs.</p>
+</div>
+
+<h2>What each model reads</h2>
+<table class="t">
+<tr><th>Model</th><th>Window (675 values)</th><th>23 numbers</th><th>Also</th></tr>
+<tr><td>PPO</td><td>✓</td><td>✓</td><td></td></tr>
+<tr><td>DQN</td><td>✓</td><td>✓</td><td></td></tr>
+<tr><td>Mini-AlphaZero</td><td>✓</td><td>✓</td><td>the game rules, to search ahead</td></tr>
+<tr><td>NEAT</td><td></td><td>✓</td><td></td></tr>
+<tr><td>CMA-ES</td><td></td><td>✓</td><td></td></tr>
+</table>
+<p class="muted small">Why the evolution methods skip the window: evolution scales badly with the number of inputs.
+NEAT would start with 2,000+ connections instead of 69, and CMA-ES's covariance matrix grows with the square of the number of weights.</p>
+</main>
+<script src="site.js"></script>
+<script src="common.js"></script>
+<script src="project.js"></script>
+<script>
+fetch('img/senses_features.json').then((r) => r.json()).then((f) => {
+  $('feats').innerHTML = '<tr><th>#</th><th>Number</th><th>Value in this position</th></tr>' +
+    f.map((x, i) => `<tr><td>${i + 1}</td><td>${esc(x.name)}</td><td class="num">${x.value.toFixed(3)}</td></tr>`).join('');
+});
+</script>
 </body>
 </html>

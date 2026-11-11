@@ -8,7 +8,7 @@ CELL = 11
 HEAD = 34
 BG = (14, 15, 20)
 GRIDC = (24, 26, 33)
-WALL = (70, 72, 82)
+WALL = (38, 40, 48)
 
 
 def hex2rgb(h):
