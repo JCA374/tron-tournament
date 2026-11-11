@@ -1,0 +1,5 @@
+["Round 3 (23:32): PPO 1896, NEAT 1871, Mini-AlphaZero 1820, DQN 1715, CMA-ES 1561 (space-filler bot 1500)",
+ "PPO took the lead from CMA-ES in round 2 (23:05)",
+ "DQN +375 points in one round, right after its exploration phase ended at 1.5 M steps",
+ "CMA-ES: first to last; 0 of 20 against Mini-AlphaZero in round 3",
+ "PPO is close to the 100-point catch-up pause"]
