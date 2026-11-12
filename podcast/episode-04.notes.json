@@ -1,0 +1,5 @@
+["Mini-AlphaZero: trained again 04:34-05:35, +250 points, paused a second time; ~3,000 self-play games in total",
+ "06:39 change for PPO, DQN, NEAT: territory bot replaces the space-filler bot as main training opponent",
+ "Two rounds later vs territory bot: PPO 4/20 -> 14/20, DQN 1/20 -> 10/20; PPO +245 to 2146 (2nd)",
+ "Side effect: DQN now loses to the space-filler bot 12/20",
+ "Knockout 1 at 12:00 (three-round average): CMA-ES 1767 vs NEAT 1786"]

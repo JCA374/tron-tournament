@@ -1,6 +1,30 @@
 {
  "episodes": [
   {
+   "n": 4,
+   "title": "Episode 04: Good morning, and a change that worked",
+   "date": "Thu 12 Nov 2026, 07:43",
+   "minutes": 2.7,
+   "mp3": "../podcast/episode-04.mp3",
+   "notes": [
+    "Mini-AlphaZero: trained again 04:34-05:35, +250 points, paused a second time; ~3,000 self-play games in total",
+    "06:39 change for PPO, DQN, NEAT: territory bot replaces the space-filler bot as main training opponent",
+    "Two rounds later vs territory bot: PPO 4/20 -> 14/20, DQN 1/20 -> 10/20; PPO +245 to 2146 (2nd)",
+    "Side effect: DQN now loses to the space-filler bot 12/20",
+    "Knockout 1 at 12:00 (three-round average): CMA-ES 1767 vs NEAT 1786"
+   ],
+   "transcript": [
+    "Good morning. It is half past seven on Thursday, and the tournament ran all night without a crash. Here is what happened while you slept.",
+    "The AlphaZero model is still the leader. It was paused at half past two for being too far ahead. At half past four the others had closed in, so it trained again. In just one hour it jumped about two hundred and fifty points, and at half past five it was paused a second time. It is the only model that clearly gets better every time it is allowed to train. And it has played only about three thousand practice games.",
+    "The other four had a harder night. For about five hours P P O, D Q N and NEAT barely moved. They hovered just below the territory bot, the hand-written yardstick fixed at two thousand points. So I looked at what they were practising against. Apart from old copies of themselves, their fixed opponent was the space-filler bot. P P O was winning ninety seven percent of those games. You don't learn much from an opponent you always beat.",
+    "At twenty to seven I made one change, the same for all three. The territory bot took the space-filler's place in their training. Nothing else changed.",
+    "It worked, and fast. Two rounds later P P O beats the territory bot fourteen times out of twenty. Before the change it was four. D Q N went from one win in twenty to ten. P P O climbed about two hundred and forty points, into second place. D Q N climbed about a hundred and forty.",
+    "There is a funny side effect. D Q N no longer practises against the space-filler bot, and it now loses to it twelve times out of twenty. It forgot an easy opponent while learning a hard one.",
+    "C M A E S got a second change during the night. Its search had frozen, so I restarted it with a wide step. It has slowly climbed to its best ratings since the first round. It is still last, but it is not far behind any more.",
+    "And that sets up the first knockout, at noon. It uses the average of the last three rounds. Right now C M A E S has seventeen hundred and sixty seven. NEAT has seventeen hundred and eighty six. That is only nineteen points apart. NEAT even beats the territory bot more often than C M A E S does. But C M A E S beats NEAT sixteen times out of twenty. So the knockout is wide open, with nine rounds left to decide it."
+   ]
+  },
+  {
    "n": 3,
    "title": "Episode 03: The first pause, and a better ruler",
    "date": "Thu 12 Nov 2026, 02:46",
