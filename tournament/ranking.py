@@ -73,6 +73,7 @@ def main():
     ap.add_argument("--final", action="store_true")
     ap.add_argument("--ffa", type=int, default=0)
     ap.add_argument("--no-bots", action="store_true")
+    ap.add_argument("--bots", default=",".join(b["id"] for b in config.BOTS), help="which fixed bots take part")
     a = ap.parse_args()
     t0 = time.time()
     tag = "final" if a.final else f"r{a.round:04d}"
@@ -83,7 +84,8 @@ def main():
             specs[mid] = s
     if not a.no_bots:
         for b in config.BOTS:
-            specs[b["id"]] = {"kind": b["id"]}
+            if b["id"] in a.bots.split(","):
+                specs[b["id"]] = {"kind": b["id"]}
     ids = list(specs)
     base = (a.round if not a.final else 999_999) * 1_000_003
     jobs = []

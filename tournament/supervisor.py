@@ -211,6 +211,9 @@ def run_round(s, final=False):
            "--models", ",".join(act), "--procs", str(procs)]
     cmd += (["--final", "--games", "200", "--ffa", "50" if len(act) >= 3 else "0", "--no-bots"] if final
             else ["--round", str(s["round"])])
+    if not final and len(act) <= 2:
+        # the duel: the random and avoid-walls bots lose every game, so they only cost search time
+        cmd += ["--bots", "territory,space-filler"]
     log = open(os.path.join(ROOT, "logs", "ranking.log"), "a")
     env = dict(os.environ, PYTHONPATH=ROOT, OMP_NUM_THREADS="1", NUMBA_NUM_THREADS="1")
     return subprocess.Popen(cmd, cwd=ROOT, stdout=log, stderr=subprocess.STDOUT, env=env)
