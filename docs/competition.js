@@ -1,5 +1,5 @@
 // Competition page: data/competition.json is written by site_hooks.extra() from results/.
-const STATUS_TXT = { training: ['training', 'ok'], paused: ['paused: leading', 'warn'], out: ['knocked out', 'bad'],
+const STATUS_TXT = { training: ['training', 'ok'], paused: ['paused: leading', 'warn'], out: ['knocked out', 'bad'], retired: ['retired: fixed opponent', ''],
   finalist: ['finalist', 'ok'], winner: ['🏆 winner', 'ok'], waiting: ['not started', ''], bot: ['fixed bot', ''] };
 function nextMilestone(sched) {
   const now = new Date();
