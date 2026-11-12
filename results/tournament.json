@@ -8,7 +8,7 @@
    "cpus": "0-3",
    "cores": 4,
    "started_at": 1794517089.275972,
-   "train": "298.8 M steps \u00b7 1.5 M games"
+   "train": "301.2 M steps \u00b7 1.5 M games"
   },
   "dqn": {
    "status": "retired",
@@ -35,7 +35,7 @@
    "out_at": "2026-11-12T12:00:23.276141+01:00"
   },
   "az": {
-   "status": "training",
+   "status": "paused",
    "cpus": "4-7",
    "cores": 4,
    "started_at": 1794521512.732456,
@@ -52,6 +52,11 @@
    "id": "az",
    "from": "2026-11-12T05:35:10.155161+01:00",
    "to": "2026-11-12T09:05:21.388565+01:00"
+  },
+  {
+   "id": "az",
+   "from": "2026-11-13T00:22:07.950517+01:00",
+   "to": null
   }
  ],
  "knockouts_done": 1,
@@ -59,5 +64,5 @@
  "leader": "az",
  "restarts": {},
  "note": "",
- "processed_round": 51
+ "processed_round": 52
 }
