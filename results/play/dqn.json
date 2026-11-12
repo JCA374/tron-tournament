@@ -1,1 +1,1 @@
-{"kind": "dqn", "path": "results/snapshots/dqn_r0013.play.pt", "meta": {"t": 1794453924.9600427, "steps": 28050848, "games": 311786}, "id": "dqn"}
+{"kind": "dqn", "path": "results/snapshots/dqn_r0017.play.pt", "meta": {"t": 1794461127.517965, "steps": 36981792, "games": 390492}, "id": "dqn"}
