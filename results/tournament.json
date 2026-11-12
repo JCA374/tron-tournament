@@ -1,35 +1,35 @@
 {
  "started": "2026-11-11T22:05:46.312792+01:00",
- "round": 7,
- "next_round_at": 1794445057.3264863,
+ "round": 8,
+ "next_round_at": 1794446871.8385742,
  "models": {
   "ppo": {
    "status": "training",
    "cpus": "0",
    "cores": 1,
    "started_at": 1794431406.7766094,
-   "train": "36.6 M steps \u00b7 256 k games"
+   "train": "39.1 M steps \u00b7 273 k games"
   },
   "dqn": {
    "status": "training",
    "cpus": "1",
    "cores": 1,
    "started_at": 1794431406.8226235,
-   "train": "16.8 M steps \u00b7 212 k games"
+   "train": "17.9 M steps \u00b7 222 k games"
   },
   "neat": {
    "status": "training",
    "cpus": "2",
    "cores": 1,
    "started_at": 1794431406.8604777,
-   "train": "generation 608 \u00b7 729 k games"
+   "train": "generation 652 \u00b7 782 k games"
   },
   "cmaes": {
    "status": "training",
    "cpus": "3",
    "cores": 1,
    "started_at": 1794440347.6493242,
-   "train": "generation 1618 \u00b7 518 k games"
+   "train": "generation 1684 \u00b7 539 k games"
   },
   "az": {
    "status": "training",
@@ -45,5 +45,5 @@
  "leader": "az",
  "restarts": {},
  "note": "",
- "processed_round": 7
+ "processed_round": 8
 }
