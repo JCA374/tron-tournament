@@ -58,6 +58,15 @@ class Run:
                 self._fields = list(row)
                 with open(path, "w", newline="") as f:
                     csv.writer(f).writerow(self._fields)
+        new = [k for k in row if k not in self._fields]
+        if new:                                   # a new column (a change during the tournament): rewrite the header
+            with open(path) as f:
+                rows = list(csv.DictReader(f))
+            self._fields += new
+            with open(path, "w", newline="") as f:
+                w = csv.DictWriter(f, self._fields)
+                w.writeheader()
+                w.writerows(rows)
         with open(path, "a", newline="") as f:
             csv.DictWriter(f, self._fields, extrasaction="ignore").writerow(
                 {k: (round(v, 5) if isinstance(v, float) else v) for k, v in row.items()})

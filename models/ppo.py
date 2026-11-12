@@ -14,11 +14,12 @@ import torch.nn.functional as F
 from models.common import Run, NetAgent, T, atomic_torch_save, make_net, setup_threads
 from tron.vecenv import VecTron
 
+AZ_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "runs", "az", "ckpt", "latest.play.pt")
 HP = dict(n_envs=64, n_steps=128, gamma=0.99, lam=0.95, clip=0.2, lr=3e-4, ent=0.01, vf=0.5, epochs=4, minibatch=1024,
           snapshot_every=25, pool_size=12, p_bot_space=0.15, p_bot_avoid=0.05, hidden=128)
 
 # settings changed during the tournament (they win over the values saved in the checkpoint); see the log
-OVERRIDE = dict(bot_main="territory", lr=1e-4)
+OVERRIDE = dict(bot_main="territory", lr=1e-4, shape_coef=1.0, p_az=0.15)
 
 
 def load_agent(path):
@@ -73,9 +74,17 @@ def main():
         run.wait_if_paused(save)
         # opponent for this iteration
         u = random.random()
-        opp = HP.get("bot_main", "space-filler") if u < HP["p_bot_space"] else "avoid-walls" if u < HP["p_bot_space"] + HP["p_bot_avoid"] else "net"
+        pb = HP["p_bot_space"] + HP["p_bot_avoid"]
+        opp = (HP.get("bot_main", "space-filler") if u < HP["p_bot_space"] else "avoid-walls" if u < pb
+               else "az" if u < pb + HP.get("p_az", 0) and os.path.exists(AZ_PATH) else "net")
         if opp == "net":
             opp_net.load_state_dict(pool[-1] if random.random() < 0.5 else random.choice(pool))
+        elif opp == "az":                 # Mini-AlphaZero's newest network, played without its tree search
+            try:
+                opp_net.load_state_dict(torch.load(AZ_PATH, weights_only=False)["net"])
+            except Exception:
+                opp_net.load_state_dict(pool[-1])
+                opp = "net"
         bw = np.zeros((Tn, N, 3, 15, 15), np.float32)
         bf = np.zeros((Tn, N, 23), np.float32)
         ba = np.zeros((Tn, N), np.int64)
@@ -89,7 +98,7 @@ def main():
                 logits, v = net(T(w), T(f))
                 dist = torch.distributions.Categorical(logits=logits)
                 act = dist.sample()
-                if opp == "net":
+                if opp in ("net", "az"):
                     ow, of = env.obs(1)
                     ol, _ = opp_net(T(ow), T(of))
                     oact = torch.distributions.Categorical(logits=ol).sample().numpy()
@@ -98,11 +107,16 @@ def main():
             bw[t], bf[t], ba[t] = w, f, act.numpy()
             blp[t], bv[t] = dist.log_prob(act).numpy(), v.numpy()
             r, d, lens = env.step(act.numpy(), oact)
-            br[t], bd[t] = r, d
             for i in np.flatnonzero(d):
                 recent.append((r[i], opp))
             games += int(d.sum())
+            phi = f[:, 11:14].max(1)
             w, f = env.obs(0)
+            if HP.get("shape_coef"):
+                # territory bonus (potential-based shaping): paid for gaining space on the opponent, step by step
+                phi2 = np.where(d, 0.0, f[:, 11:14].max(1))
+                r = r + HP["shape_coef"] * (HP["gamma"] * phi2 - phi)
+            br[t], bd[t] = r, d
         steps += N * Tn
         with torch.no_grad():
             _, last_v = net(T(w), T(f))
@@ -142,7 +156,7 @@ def main():
         def wr(kind):
             xs = [r for r, o in recent if (o == "net") == (kind == "net") and (kind == "net" or o == kind)]
             return (sum(1 for r in xs if r > 0) / len(xs)) if xs else ""
-        run.stats({"it": it, "steps": steps, "games": games, "win_vs_self": wr("net"), "win_vs_space": wr(HP.get("bot_main", "space-filler")),
+        run.stats({"it": it, "steps": steps, "games": games, "win_vs_self": wr("net"), "win_vs_space": wr(HP.get("bot_main", "space-filler")), "win_vs_az": wr("az"),
                    "entropy": float(ent.detach()), "value_loss": float(vl.detach()), "sps": round((steps - s0) / max(1, time.time() - t_start))})
         if time.time() - last_save > 300:
             save()

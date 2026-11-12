@@ -20,6 +20,11 @@ HP = dict(hidden=128, sims=48, eval_sims=32, c_puct=1.5, dir_alpha=0.6, dir_frac
           parallel_games=16, buffer=80_000, batch=256, lr=1e-3, wd=1e-4, train_per_game=6, p_bot_game=0.0)
 
 
+PPO_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "runs", "ppo", "ckpt", "latest.play.pt")
+# settings changed during the tournament (they win over the values saved in the checkpoint); see the log
+OVERRIDE = dict(sims=128, eval_sims=128, p_ppo=0.3)
+
+
 def copy_state(s):
     return {"grid": s["grid"].copy(), "pos": s["pos"].copy(), "dirs": s["dirs"].copy(), "alive": s["alive"].copy(), "t": s["t"]}
 
@@ -163,8 +168,10 @@ def load_agent(path, sims=None):
     return AZAgent(net, sims or ck["hp"]["eval_sims"], ck["hp"]["c_puct"])
 
 
-def selfplay(net, hp, seed):
-    """Play hp['parallel_games'] 1v1 self-play games at once. Returns samples (win, feat, pi, z) and game lengths."""
+def selfplay(net, hp, seed, opp_net=None):
+    """Play hp['parallel_games'] 1v1 self-play games at once. Returns samples (win, feat, pi, z) and game lengths.
+    With opp_net (PPO's newest network), one bike in every game is PPO instead (its side alternates); the search still
+    models both bikes, and only Mini-AlphaZero's own moves become training samples."""
     K = hp["parallel_games"]
     rng = np.random.default_rng(seed)
     games = [sim.new_game(2, int(rng.integers(1 << 30))) for _ in range(K)]
@@ -178,6 +185,11 @@ def selfplay(net, hp, seed):
             g, root = games[i], roots[i]
             acts = np.ones(2, np.int32)
             for b in np.flatnonzero(g["alive"]):
+                if opp_net is not None and b == i % 2:
+                    w, f = sim.observe(g, b)
+                    with torch.no_grad():
+                        acts[b] = int(opp_net(T(w[None]), T(f[None]))[0][0].argmax())
+                    continue
                 n = root.N[b]
                 pi = n / max(1, n.sum())
                 w, f = sim.observe(g, b)
@@ -198,7 +210,9 @@ def selfplay(net, hp, seed):
         for (w, f, pi, b) in hist[i]:
             z = 0.0 if r < 0 else (1.0 if r == b else -1.0)
             out.append((w, f, pi, z))
-    return out, lens, done
+    info = {"vs_ppo": opp_net is not None,
+            "score": [0.5 if done[i] < 0 else float(done[i] != i % 2) for i in range(K)] if opp_net is not None else []}
+    return out, lens, info
 
 
 def worker(wpath, q, hp, seed, stop):
@@ -216,7 +230,14 @@ def worker(wpath, q, hp, seed, stop):
         except Exception:
             time.sleep(1)
             continue
-        out = selfplay(net, hp, seed * 1000003 + k)
+        opp = None
+        if hp.get("p_ppo") and np.random.random() < hp["p_ppo"] and os.path.exists(PPO_PATH):
+            try:
+                opp = make_net(3, 128, value_head=True).eval()
+                opp.load_state_dict(torch.load(PPO_PATH, weights_only=False)["net"])
+            except Exception:
+                opp = None
+        out = selfplay(net, hp, seed * 1000003 + k, opp)
         while not stop.is_set():
             try:
                 q.put(out, timeout=5)
@@ -242,6 +263,7 @@ def main():
     if a.resume and os.path.exists(ck_path):
         ck = torch.load(ck_path, weights_only=False)
         HP.update(ck["hp"])
+        HP.update(OVERRIDE)
         net.load_state_dict(ck["net"])
         opt.load_state_dict(ck["opt"])
         games, positions, updates = ck["games"], ck["positions"], ck["updates"]
@@ -262,6 +284,7 @@ def main():
             w.start()
     t_start, last_save, recent_len, g0 = time.time(), time.time(), collections.deque(maxlen=200), games
     loss_p = loss_v = 0.0
+    recent_ppo = collections.deque(maxlen=200)
 
     def save():
         atomic_torch_save({"net": net.state_dict(), "opt": opt.state_dict(), "hp": HP, "games": games,
@@ -277,12 +300,13 @@ def main():
         t0 = time.time()
         if workers:
             try:
-                samples, lens, _ = q.get(timeout=10)       # a timeout so a stop signal is noticed
+                samples, lens, info = q.get(timeout=10)       # a timeout so a stop signal is noticed
             except Exception:
                 continue
+            recent_ppo.extend(info.get("score", []))
         else:
             net.eval()
-            samples, lens, _ = selfplay(net, HP, int(time.time() * 1000) % (1 << 30))
+            samples, lens, info = selfplay(net, HP, int(time.time() * 1000) % (1 << 30))
         buf.extend(samples)
         games += len(lens)
         positions += len(samples)
@@ -309,7 +333,7 @@ def main():
         atomic_torch_save(net.state_dict(), wpath)
         run.stats({"games": games, "positions": positions, "updates": updates, "policy_loss": loss_p, "value_loss": loss_v,
                    "mean_len": round(float(np.mean(recent_len)), 1), "sec_per_batch": round(time.time() - t0, 1),
-                   "games_per_hour": round((games - g0) / max(1, time.time() - t_start) * 3600)})
+                   "score_vs_ppo": round(float(np.mean(recent_ppo)), 3) if recent_ppo else "", "games_per_hour": round((games - g0) / max(1, time.time() - t_start) * 3600)})
         if time.time() - last_save > 300 or batches == 1:
             save()
             last_save = time.time()

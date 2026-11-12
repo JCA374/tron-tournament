@@ -35,8 +35,9 @@ def replay_gif(policy_path, seed, out_gif):
 
 # ---------------------------------------------------------------- Play tab
 def models():
-    p = os.path.join(RES, 'play_models.json')
-    return json.load(open(p)) if os.path.exists(p) else []
+    # Thu 22:10: the Play tab became the Arena (docs/arena.js replays games live in the browser), so no MP4 clips any more;
+    # an empty list makes publish.py delete the old clips.
+    return []
 
 
 def games():

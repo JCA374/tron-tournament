@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Schedule & rules</title>
-<link rel="stylesheet" href="style.css?v=f053e149">
+<link rel="stylesheet" href="style.css?v=0a73e2a1">
 </head>
 <body>
 <main>
@@ -57,6 +57,17 @@ stays on the site, and its CPU core goes to the others:</p>
 The winner is the top of the final 1v1 ratings; the free-for-all result is reported next to it.</p>
 </div>
 
+<h2>Thursday 22:00: the duel</h2>
+<div class="box">
+<p>After 24 hours the field had split into two pairs, and only PPO and Mini-AlphaZero were winning the fight for space. So the
+tournament became a duel. NEAT and DQN were <b>retired</b>: they stopped training, and their last checkpoints stay as fixed
+opponents in the Arena. Knockout 2 (Friday 06:00) was cancelled. PPO and Mini-AlphaZero now train on <b>4 cores each</b>, and the
+final on Friday at 16:00 is 200 games between the two. The catch-up rule still applies: a leader more than 100 points ahead pauses.</p>
+<p>To push them toward real fights: Mini-AlphaZero searches deeper (128 simulations per move) and plays 30% of its practice
+games against PPO's newest network; PPO is paid a <b>territory bonus</b> for every bit of space it gains on its opponent and plays
+15% of its practice games against Mini-AlphaZero's network.</p>
+</div>
+
 <h2>What I may change during the tournament</h2>
 <div class="box">
 <p>The goal is that every method plays as well as it can in the time it has, so the result says something about the methods and
@@ -65,7 +76,7 @@ search simulations, population size and bug fixes. Not allowed: switching a mode
 models, or giving one model more CPU than its share. Every change is in the Log with the reason and the result.</p>
 </div>
 </main>
-<script src="site.js?v=707a4ed6"></script>
+<script src="site.js?v=b3eedae9"></script>
 <script src="common.js?v=448bd7f6"></script>
 <script src="project.js?v=13964608"></script>
 <script>

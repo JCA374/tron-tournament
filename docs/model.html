@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>The models</title>
-<link rel="stylesheet" href="style.css?v=f053e149">
+<link rel="stylesheet" href="style.css?v=0a73e2a1">
 </head>
 <body>
 <main>
@@ -23,6 +23,12 @@ by more than 20% in one update, which keeps learning stable.</p>
 <p><b>Who it plays:</b> 80% of the time an older copy of itself (a pool of the last 12 snapshots, one saved every 25 updates), 15%
 the space-filler bot and 5% the avoid-walls bot. Playing old selves rather than only the newest avoids going in circles.</p>
 <p><b>Expected:</b> steady, reliable progress; it's the method most game-playing RL starts from.</p>
+<p><b>Changes during the tournament:</b> Thu 06:39 its fixed training bot became the territory bot (it had beaten the
+space-filler 97% of the time). Thu 21:38 learning rate 3e-4 → 1e-4 after a 12-hour plateau. Thu 22:00, the duel: a
+<b>territory bonus</b>. After every move it's paid for the change in its territory score: the cells it reaches before the opponent minus
+those the opponent reaches first, as a share of the board. That's "potential-based" shaping: over a whole game the bonuses add up
+to the space it gained, so it doesn't change what winning means, but an early cut-off now pays off immediately. It also plays 15% of
+its games against Mini-AlphaZero's network.</p>
 <div class="chartbox"><div class="h"><canvas id="c_ppo"></canvas></div></div></div>
 
 <div class="box" id="dqn"><h3><span class="dot" style="background:#f76707"></span>DQN: Deep Q-Network (double, dueling, 3-step)</h3>
@@ -65,6 +71,9 @@ exploring and guesses who's winning in positions it doesn't search further.</p>
 separate statistics for each bike ("decoupled" search), and the next position depends on <i>both</i> bikes' moves.</p>
 <p><b>How it learns:</b> only from self-play. After each game the network is trained to predict (a) the moves the search ended up
 preferring and (b) who won. Better network → better search → better training data.</p>
+<p><b>Changes during the tournament:</b> Thu 22:00, the duel: <b>128 simulations per move</b> (it was 48 in training and 32 in
+matches), so it sees further ahead, and 30% of its practice games are against PPO's newest network. In those games the search still
+plans for both bikes, but only its own moves become training data.</p>
 <p><b>Expected:</b> strong from the start, because search with an exact copy of the rules catches immediate traps. But every move costs
 ~32 network calls, so it plays far fewer games than the others (about 1,200 an hour on one core, against PPO's ~15,000).</p>
 <div class="chartbox"><div class="h"><canvas id="c_az"></canvas></div></div></div>
@@ -75,7 +84,7 @@ preferring and (b) who won. Better network → better search → better training
 <tr><td>Avoid-walls</td><td>never crashes on this tick if it can help it; 60% straight, otherwise a random safe turn</td></tr>
 <tr><td>Space-filler</td><td>always the move with the most reachable free cells (ties: straight). Pinned at 1500 in the ratings.</td></tr></table>
 </main>
-<script src="site.js?v=707a4ed6"></script>
+<script src="site.js?v=b3eedae9"></script>
 <script src="common.js?v=448bd7f6"></script>
 <script src="project.js?v=13964608"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>

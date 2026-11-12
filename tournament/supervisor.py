@@ -65,8 +65,10 @@ def cpu_plan(n):
         per, rank = 1, "5-7"
     elif n == 4:
         per, rank = 2, "0-7"
-    else:
+    elif n == 3:
         per, rank = 2, "6-7"
+    else:                      # the duel: PPO and Mini-AlphaZero, 4 cores each; rounds run at low priority on all
+        per, rank = 4, "0-7"
     return per, rank
 
 
@@ -207,7 +209,8 @@ def run_round(s, final=False):
     procs = 8 if final else (3 if len(act) >= 5 else 2)
     cmd = ["nice", "-n", "10", "taskset", "-c", "0-7" if final else rank_cpus, PY, "-m", "tournament.ranking",
            "--models", ",".join(act), "--procs", str(procs)]
-    cmd += ["--final", "--games", "200", "--ffa", "50", "--no-bots"] if final else ["--round", str(s["round"])]
+    cmd += (["--final", "--games", "200", "--ffa", "50" if len(act) >= 3 else "0", "--no-bots"] if final
+            else ["--round", str(s["round"])])
     log = open(os.path.join(ROOT, "logs", "ranking.log"), "a")
     env = dict(os.environ, PYTHONPATH=ROOT, OMP_NUM_THREADS="1", NUMBA_NUM_THREADS="1")
     return subprocess.Popen(cmd, cwd=ROOT, stdout=log, stderr=subprocess.STDOUT, env=env)
@@ -231,6 +234,11 @@ def after_round(s):
         return
     rnd = json.load(open(p))
     tournament_stats(rnd)
+    if s["round"] % 4 == 0 and not pgrep("^" + PY + " -m tournament.arena"):
+        # the Arena page's game library, with the newest PPO and Mini-AlphaZero (low priority, in the background)
+        env = dict(os.environ, PYTHONPATH=ROOT, OMP_NUM_THREADS="1", NUMBA_NUM_THREADS="1")
+        subprocess.Popen(["nice", "-n", "10", PY, "-m", "tournament.arena", "--procs", "2"], cwd=ROOT, env=env,
+                         stdout=open(os.path.join(ROOT, "logs", "arena.log"), "a"), stderr=subprocess.STDOUT, start_new_session=True)
     if s["round"] % 8 == 1 or not os.path.exists(os.path.join(RES, "play_models.json")):
         try:
             from tournament.play import update_play_files
@@ -304,6 +312,29 @@ def knockout(s, k):
     rebalance(s, f"After knockout {k}, {len(active(s))} models share the training cores.")
 
 
+def check_retire(s):
+    """results/RETIRE.json {"ids": [...], "why": "..."}: stop training these models for good (their checkpoints stay)."""
+    p = os.path.join(RES, "RETIRE.json")
+    if not os.path.exists(p):
+        return
+    req = json.load(open(p))
+    os.remove(p)
+    done = []
+    for m in req["ids"]:
+        if m in active(s):
+            stop_trainer(m)
+            pz = os.path.join(ROOT, "runs", m, "PAUSE")
+            if os.path.exists(pz):
+                os.remove(pz)
+            s["models"][m]["status"] = "retired"
+            s["models"][m]["out_at"] = now().isoformat()
+            done.append(m)
+    if done:
+        event("retire", ", ".join(LBL[m] for m in done) + " stop training: the tournament becomes a duel",
+              req.get("why", ""))
+        rebalance(s, f"{len(active(s))} models share the training cores.")
+
+
 def final(s):
     act = active(s)
     for m in act:
@@ -316,8 +347,8 @@ def final(s):
         if not p.get("to"):
             p["to"] = now().isoformat()
     event("final", "The final starts: training has stopped",
-          "Finalists: " + ", ".join(LBL[m] for m in act) + ". 200 games per pair (100 start positions, both sides) and "
-          "50 three-bike free-for-all games, using each model's last checkpoint.")
+          "Finalists: " + ", ".join(LBL[m] for m in act) + ". 200 games per pair (100 start positions, both sides)" +
+          (" and 50 three-bike free-for-all games" if len(act) >= 3 else "") + ", using each model's last checkpoint.")
     save_state(s)
     p = run_round(s, final=True)
     p.wait()
@@ -367,7 +398,9 @@ def main():
             if ranking is None and s.get("processed_round", 0) < s["round"] and not pgrep("^" + PY + " -m tournament.ranking"):
                 after_round(s)                    # a round that finished while the supervisor was restarting
                 s["processed_round"] = s["round"]
-            if ranking is None and s["knockouts_done"] < len(kos) and now() >= kos[s["knockouts_done"]]:
+            if ranking is None:
+                check_retire(s)
+            if ranking is None and s["knockouts_done"] < len(kos) and now() >= kos[s["knockouts_done"]] and len(active(s)) > 2:
                 s["knockouts_done"] += 1
                 knockout(s, s["knockouts_done"])
             ensure_trainers(s)

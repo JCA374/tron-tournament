@@ -3,27 +3,59 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Play</title>
-<link rel="stylesheet" href="style.css?v=f053e149">
+<title>Arena</title>
+<link rel="stylesheet" href="style.css?v=0a73e2a1">
 </head>
 <body>
 <main>
-<h1>Watch the models play</h1>
-<p class="lede">Pick a model (newest first) and a game. Every model plays the same games, so you can compare them. A clip plays
-once and stops on its result; press play to watch it again.</p>
-<div class="picker" id="models"></div>
-<p class="muted small" id="mnote"></p>
-<div class="player" id="player"><video id="video" controls muted playsinline preload="metadata"></video></div>
-<p id="caption"></p>
-<div class="picker"><button id="next">Next game →</button></div>
-<h2>Games</h2>
-<div class="games" id="games"></div>
-<h2>All models on this game</h2>
-<div class="cmp" id="cmp"></div>
+<h1>Arena</h1>
+<p class="lede">Pick two fighters and press <b>Fight!</b> Every game here was really played by the models (the two still
+training are refreshed every two hours), and your browser replays it move by move. Turn on <b>territory</b> to see the
+fight for space: each cell is tinted by the bike that can reach it first. The one walled into the smaller area almost always loses.</p>
+
+<div class="arena-pick">
+  <div><div class="k">Player 1</div><div class="chips" id="pickA"></div></div>
+  <div><div class="k">Player 2</div><div class="chips" id="pickB"></div></div>
+</div>
+<div class="picker">
+  <button class="fight" id="fight">⚔️ Fight!</button>
+  <button id="ffa">🏟️ Free-for-all: all five models</button>
+</div>
+
+<div class="arena">
+  <div class="arena-stage">
+    <canvas id="board" width="640" height="640"></canvas>
+    <div class="banner" id="banner"></div>
+    <div class="toast" id="toast"></div>
+  </div>
+  <aside class="side">
+    <div class="series" id="series"></div>
+    <div class="live" id="live"></div>
+    <div class="ctl">
+      <button id="play">⏸ Pause</button>
+      <button id="replay">↺ Replay</button>
+      <button id="next">Next game →</button>
+    </div>
+    <div class="ctl" id="speeds"></div>
+    <label class="tog"><input type="checkbox" id="terr" checked> show territory</label>
+    <p class="muted small" id="meta"></p>
+  </aside>
+</div>
+
+<h2>How to read it</h2>
+<div class="box">
+<p><b>Glowing trail</b> = a bike's wall. <b>White square</b> = its head. Bikes move one cell per tick and can only turn
+left, go straight or turn right. A crash bursts into sparks.</p>
+<p><b>Territory</b> (the tint): cells the bike reaches first if both raced there now. The bars on the right show each
+bike's share. When the two areas stop touching, they're <b>walled off</b> from each other: from then on it's only about
+who fills their own area more efficiently, and the bigger area wins about 94% of the time.</p>
+<p><b>Series</b>: every pair played several games from different start positions, each position from both sides. The
+score at the top right is the whole series.</p>
+</div>
 </main>
-<script src="site.js?v=707a4ed6"></script>
+<script src="site.js?v=b3eedae9"></script>
 <script src="common.js?v=448bd7f6"></script>
 <script src="project.js?v=13964608"></script>
-<script src="play.js?v=bdb3d051"></script>
+<script src="arena.js?v=f3de14ee"></script>
 </body>
 </html>
