@@ -1,28 +1,28 @@
 {
  "started": "2026-11-11T22:05:46.312792+01:00",
- "round": 29,
- "next_round_at": 1794484906.5124664,
+ "round": 32,
+ "next_round_at": 1794490328.398826,
  "models": {
   "ppo": {
    "status": "training",
    "cpus": "0-1",
    "cores": 2,
-   "started_at": 1794481229.4362545,
-   "train": "169.1 M steps \u00b7 935 k games"
+   "started_at": 1794483599.4220874,
+   "train": "184.9 M steps \u00b7 1.0 M games"
   },
   "dqn": {
    "status": "training",
    "cpus": "2-3",
    "cores": 2,
-   "started_at": 1794481233.5433598,
-   "train": "61.0 M steps \u00b7 581 k games"
+   "started_at": 1794483599.4657862,
+   "train": "65.0 M steps \u00b7 612 k games"
   },
   "neat": {
    "status": "training",
    "cpus": "4-5",
    "cores": 2,
    "started_at": 1794481245.8661158,
-   "train": "generation 2451 \u00b7 2.9 M games"
+   "train": "generation 2729 \u00b7 3.3 M games"
   },
   "cmaes": {
    "status": "out",
@@ -37,7 +37,7 @@
    "cpus": "6-7",
    "cores": 2,
    "started_at": 1794481300.9055617,
-   "train": "5 k self-play games"
+   "train": "7 k self-play games"
   }
  },
  "pauses": [
@@ -57,5 +57,5 @@
  "leader": "az",
  "restarts": {},
  "note": "",
- "processed_round": 28
+ "processed_round": 31
 }

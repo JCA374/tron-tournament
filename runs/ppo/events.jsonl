@@ -3,3 +3,5 @@
 {"t": "2026-11-12 06:38", "kind": "change", "what": "main training bot: space-filler -> territory bot", "reason": "Flat for ten rounds (rounds 8-17, about five hours) while the hand-written territory bot (fixed at 2002) still beats it; its main bot opponent, the space-filler, had become too easy (PPO won 97% of those training games).", "before": "15% of training batches vs the space-filler bot; now the same share against the territory bot. Everything else unchanged."}
 {"t": "2026-11-12 06:39", "kind": "resume", "note": "iteration 12162, 99,631,104 steps"}
 {"t": "2026-11-12 12:00", "kind": "resume", "note": "iteration 19908, 163,086,336 steps"}
+{"t": "2026-11-12 12:39", "kind": "change", "what": "speed fix: torch uses 1 thread, the second core goes to the parallel observation code", "reason": "After the switch to 2 cores at 12:01, torch ran with 2 threads, which on these tiny networks made each step about 3x slower (benchmark: 39 ms vs 126 ms per DQN step). DQN fell from ~1,150 to 676 moves/s, PPO from ~3,900 to ~2,700.", "before": "torch threads = cores (2)"}
+{"t": "2026-11-12 12:40", "kind": "resume", "note": "iteration 20661, 169,254,912 steps"}
