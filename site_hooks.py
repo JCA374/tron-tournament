@@ -46,6 +46,8 @@ def games():
 
 def render_play(policy_path, game, out_mp4):
     """policy_path here is the model's snapshot spec; the game is played live and rendered."""
+    import torch
+    torch.set_num_threads(1)          # torch's default (8 threads) on busy cores made one clip take ~10 minutes
     from tournament import play
     from tron import render
     rep = play.play_tab_game(policy_path, game)
