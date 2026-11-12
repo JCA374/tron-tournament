@@ -16,7 +16,9 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 def setup_threads(cores):
     os.environ.setdefault("NUMBA_NUM_THREADS", str(cores))
     import torch
-    torch.set_num_threads(cores)
+    # always 1: on these tiny networks 2 torch threads made a DQN step 3x slower (39 -> 126 ms, Thu 12:40);
+    # extra cores go to numba's parallel observation code instead
+    torch.set_num_threads(1)
     try:
         import numba
         numba.set_num_threads(min(cores, numba.config.NUMBA_NUM_THREADS))
