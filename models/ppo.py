@@ -17,6 +17,9 @@ from tron.vecenv import VecTron
 HP = dict(n_envs=64, n_steps=128, gamma=0.99, lam=0.95, clip=0.2, lr=3e-4, ent=0.01, vf=0.5, epochs=4, minibatch=1024,
           snapshot_every=25, pool_size=12, p_bot_space=0.15, p_bot_avoid=0.05, hidden=128)
 
+# settings changed during the tournament (they win over the values saved in the checkpoint); see the log
+OVERRIDE = dict(bot_main="territory")
+
 
 def load_agent(path):
     ck = torch.load(path, weights_only=False)
@@ -41,6 +44,7 @@ def main():
     if a.resume and os.path.exists(ck_path):
         ck = torch.load(ck_path, weights_only=False)
         HP.update(ck["hp"])
+        HP.update(OVERRIDE)
         net.load_state_dict(ck["net"])
         opt.load_state_dict(ck["opt"])
         it, steps, games, pool = ck["it"], ck["steps"], ck["games"], ck["pool"]
@@ -67,7 +71,7 @@ def main():
         run.wait_if_paused(save)
         # opponent for this iteration
         u = random.random()
-        opp = "space-filler" if u < HP["p_bot_space"] else "avoid-walls" if u < HP["p_bot_space"] + HP["p_bot_avoid"] else "net"
+        opp = HP.get("bot_main", "space-filler") if u < HP["p_bot_space"] else "avoid-walls" if u < HP["p_bot_space"] + HP["p_bot_avoid"] else "net"
         if opp == "net":
             opp_net.load_state_dict(pool[-1] if random.random() < 0.5 else random.choice(pool))
         bw = np.zeros((Tn, N, 3, 15, 15), np.float32)
@@ -136,7 +140,7 @@ def main():
         def wr(kind):
             xs = [r for r, o in recent if (o == "net") == (kind == "net") and (kind == "net" or o == kind)]
             return (sum(1 for r in xs if r > 0) / len(xs)) if xs else ""
-        run.stats({"it": it, "steps": steps, "games": games, "win_vs_self": wr("net"), "win_vs_space": wr("space-filler"),
+        run.stats({"it": it, "steps": steps, "games": games, "win_vs_self": wr("net"), "win_vs_space": wr(HP.get("bot_main", "space-filler")),
                    "entropy": float(ent.detach()), "value_loss": float(vl.detach()), "sps": round((steps - s0) / max(1, time.time() - t_start))})
         if time.time() - last_save > 300:
             save()

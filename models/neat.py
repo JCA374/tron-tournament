@@ -16,6 +16,9 @@ from models.common import Run, atomic_pickle
 CFG = os.path.join(os.path.dirname(os.path.abspath(__file__)), "neat.cfg")
 HP = dict(hof_size=6, n_bot_space=4, n_bot_avoid=2, n_hof_games=4)
 
+# settings changed during the tournament (they win over the values saved in the checkpoint); see the log
+OVERRIDE = dict(bot_main="territory")
+
 
 def load_agent(path):
     d = pickle.load(open(path, "rb"))
@@ -38,6 +41,7 @@ def main():
         s = pickle.load(open(state_path, "rb"))
         pop, gen, games, hof = s["pop"], s["gen"], s["games"], s["hof"]
         HP.update(s.get("hp", {}))
+        HP.update(OVERRIDE)
         run.event("resume", note=f"generation {gen}")
     else:
         pop = neat.Population(config)
@@ -58,7 +62,7 @@ def main():
             save()
             run.wait_if_paused()
         sched = evo.schedule(len(hof), gen * 7919 + 13, HP["n_bot_space"], HP["n_bot_avoid"], HP["n_hof_games"])
-        opps = ["space-filler", "avoid-walls"] + [("neat", g, CFG) for g in hof]
+        opps = [HP.get("bot_main", "space-filler"), "avoid-walls"] + [("neat", g, CFG) for g in hof]
         stats = {}
 
         def eval_genomes(genomes, config):

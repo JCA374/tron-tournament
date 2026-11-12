@@ -35,6 +35,9 @@ def dueling_net(hidden):
             return v + adv - adv.mean(1, keepdim=True)
     return Duel()
 
+# settings changed during the tournament (they win over the values saved in the checkpoint); see the log
+OVERRIDE = dict(bot_main="territory")
+
 
 def load_agent(path):
     ck = torch.load(path, weights_only=False)
@@ -88,6 +91,7 @@ def main():
     if a.resume and os.path.exists(ck_path):
         ck = torch.load(ck_path, weights_only=False)
         HP.update(ck["hp"])
+        HP.update(OVERRIDE)
         net.load_state_dict(ck["net"])
         opt.load_state_dict(ck["opt"])
         steps, games, updates, pool = ck["steps"], ck["games"], ck["updates"], ck["pool"]
@@ -121,7 +125,7 @@ def main():
             run.wait_if_paused()
         if opp_left <= 0:
             u = random.random()
-            opp = "space-filler" if u < HP["p_bot_space"] else "avoid-walls" if u < HP["p_bot_space"] + HP["p_bot_avoid"] else "net"
+            opp = HP.get("bot_main", "space-filler") if u < HP["p_bot_space"] else "avoid-walls" if u < HP["p_bot_space"] + HP["p_bot_avoid"] else "net"
             if opp == "net":
                 opp_net.load_state_dict(pool[-1] if random.random() < 0.5 else random.choice(pool))
             opp_left = HP["opp_switch"]
@@ -183,7 +187,7 @@ def main():
                 xs = [r for r, o in recent if o == kind]
                 return (sum(1 for r in xs if r > 0) / len(xs)) if xs else ""
             run.stats({"steps": steps, "games": games, "updates": updates, "eps": round(eps, 4), "win_vs_self": wr("net"),
-                       "win_vs_space": wr("space-filler"), "loss": loss_v, "sps": round((steps - s0) / max(1, time.time() - t_start))})
+                       "win_vs_space": wr(HP.get("bot_main", "space-filler")), "loss": loss_v, "sps": round((steps - s0) / max(1, time.time() - t_start))})
             last_log = time.time()
         if time.time() - last_save > 300:
             save()

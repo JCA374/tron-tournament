@@ -79,7 +79,12 @@ class VecTron:
 
     def bot(self, kind, b=1):
         out = np.ones(self.n, np.int32)
-        if kind == "space-filler":
+        if kind == "territory":
+            _, f = self.obs(b)
+            key = f[:, 11:14] * 10_000 + f[:, 8:11] + np.array([0, 1e-6, 0], np.float32)
+            out[:] = key.argmax(1)
+            out[~self.alive[:, b]] = 1
+        elif kind == "space-filler":
             _space_filler_batch(self.grids, self.pos, self.dirs, self.alive, b, out)
         elif kind == "avoid-walls":
             _avoid_walls_batch(self.grids, self.pos, self.dirs, self.alive, b, self.rng.random((self.n, 2)), out)

@@ -83,8 +83,8 @@ preferring and (b) who won. Better network → better search → better training
 (async function () {
   const st = await get('stats.json');
   if (!st || !window.Chart) return;
-  const spec = { ppo: ['steps', 1e-6, 'million moves', [['win_vs_self', 'win % vs old self'], ['win_vs_space', 'win % vs space-filler']], 100],
-    dqn: ['steps', 1e-6, 'million moves', [['win_vs_self', 'win % vs old self'], ['win_vs_space', 'win % vs space-filler']], 100],
+  const spec = { ppo: ['steps', 1e-6, 'million moves', [['win_vs_self', 'win % vs old self'], ['win_vs_space', 'win % vs main training bot (space-filler; territory from Thu 06:45)']], 100],
+    dqn: ['steps', 1e-6, 'million moves', [['win_vs_self', 'win % vs old self'], ['win_vs_space', 'win % vs main training bot (space-filler; territory from Thu 06:45)']], 100],
     neat: ['gen', 1, 'generation', [['best_fit', 'best fitness'], ['mean_fit', 'mean fitness']], 1],
     cmaes: ['gen', 1, 'generation', [['best_fit', 'best fitness'], ['mean_fit', 'mean fitness']], 1],
     az: ['games', 1e-3, 'thousand self-play games', [['value_loss', 'value loss'], ['policy_loss', 'policy loss']], 1] };
