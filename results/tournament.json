@@ -8,28 +8,28 @@
    "cpus": "0",
    "cores": 1,
    "started_at": 1794431406.7766094,
-   "train": "92.9 M steps \u00b7 607 k games"
+   "train": "96.8 M steps \u00b7 631 k games"
   },
   "dqn": {
    "status": "training",
    "cpus": "1",
    "cores": 1,
    "started_at": 1794431406.8226235,
-   "train": "35.9 M steps \u00b7 381 k games"
+   "train": "37.1 M steps \u00b7 392 k games"
   },
   "neat": {
    "status": "training",
    "cpus": "2",
    "cores": 1,
    "started_at": 1794431406.8604777,
-   "train": "generation 1376 \u00b7 1.7 M games"
+   "train": "generation 1427 \u00b7 1.7 M games"
   },
   "cmaes": {
    "status": "training",
    "cpus": "3",
    "cores": 1,
    "started_at": 1794447520.268189,
-   "train": "generation 2675 \u00b7 856 k games"
+   "train": "generation 2745 \u00b7 878 k games"
   },
   "az": {
    "status": "paused",
