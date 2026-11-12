@@ -12,6 +12,13 @@
 <p class="lede">What this tournament taught, written down as it happens, newest first. Some are about the methods,
 some about running a two-day experiment unattended.</p>
 
+<div class="lesson"><h3>An opponent you always beat teaches nothing</h3>
+<p>Thursday 01:30–06:30. PPO, DQN and NEAT were flat for five hours. Their fixed training opponent was the space-filler bot, which
+PPO beat in 97% of its training games. At 06:39 the territory bot took its place (same share of games, nothing else changed).
+Two rounds later PPO beat the territory bot 14 times out of 20 (it was 4) and DQN 10 (it was 1). PPO gained about 245 points.</p>
+<p><b>Side effect:</b> DQN then lost 12 of 20 to the space-filler bot, which it no longer practised against. Self-play pools
+forget easy opponents. <b>Lesson:</b> keep moving the fixed opponents up as the models improve, and keep a few easy ones in the mix.</p></div>
+
 <div class="lesson"><h3>A yardstick everyone beats every time stops measuring</h3>
 <p>Thursday 01:32. Round 7 put Mini-AlphaZero up 290 points and PPO up 247 in a single round. But the top four had beaten the pinned
 space-filler bot 20 out of 20. Against a perfect score the fit only knows "much stronger", and the scale floats: the jump was mostly the
