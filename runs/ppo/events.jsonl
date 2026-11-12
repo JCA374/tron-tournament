@@ -5,3 +5,5 @@
 {"t": "2026-11-12 12:00", "kind": "resume", "note": "iteration 19908, 163,086,336 steps"}
 {"t": "2026-11-12 12:39", "kind": "change", "what": "speed fix: torch uses 1 thread, the second core goes to the parallel observation code", "reason": "After the switch to 2 cores at 12:01, torch ran with 2 threads, which on these tiny networks made each step about 3x slower (benchmark: 39 ms vs 126 ms per DQN step). DQN fell from ~1,150 to 676 moves/s, PPO from ~3,900 to ~2,700.", "before": "torch threads = cores (2)"}
 {"t": "2026-11-12 12:40", "kind": "resume", "note": "iteration 20661, 169,254,912 steps"}
+{"t": "2026-11-12 21:38", "kind": "change", "what": "learning rate 3e-4 -> 1e-4", "reason": "Flat for about 12 hours (rounds 23-46): it beats the territory bot 90-100% but loses 70-90% to Mini-AlphaZero, with no trend. A lower learning rate lets it fine-tune instead of bouncing around a plateau.", "before": "learning rate 3e-4 since the start (170 M+ moves)"}
+{"t": "2026-11-12 21:38", "kind": "resume", "note": "iteration 33727, 276,291,584 steps"}
