@@ -1,0 +1,5 @@
+["Replay analysis: the bigger side after separation wins 94%; Mini-AlphaZero wins the split 76%, PPO 65%; separations come late (~tick 160)",
+ "21:58: the duel. NEAT and DQN retired (fixed opponents), knockout 2 cancelled, 4 cores each for PPO and Mini-AlphaZero",
+ "Mini-AlphaZero: 128 simulations per move (was 48 training / 32 matches), 30% of practice games vs PPO",
+ "PPO: territory bonus (potential-based shaping) and 15% of games vs Mini-AlphaZero's network; it beats that bare network 95%",
+ "New Arena page: pick any two fighters and watch real games replayed live, with a territory overlay; first duel series Mini-AlphaZero 10, PPO 4, 2 draws"]
