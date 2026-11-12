@@ -80,8 +80,22 @@ def trainer_pattern(m):
     return f"^{PY} -m models\\.{m} --run {m}( |$)"
 
 
+def trainer_pids(m):
+    """Main trainer processes only: worker processes forked by a trainer (same command line) are left out."""
+    pids = pgrep(trainer_pattern(m))
+    out = []
+    for p in pids:
+        try:
+            ppid = int(open(f"/proc/{p}/stat").read().rsplit(")", 1)[1].split()[1])
+        except (OSError, ValueError, IndexError):
+            continue
+        if ppid not in pids:
+            out.append(p)
+    return out
+
+
 def trainer_alive(m):
-    return bool(pgrep(trainer_pattern(m)))
+    return bool(trainer_pids(m))
 
 
 def start_trainer(s, m, cpus, cores):
@@ -151,7 +165,7 @@ def ensure_trainers(s):
     plan, per = assign(s)
     for m in active(s):
         st = s["models"][m]
-        pids = pgrep(trainer_pattern(m))
+        pids = trainer_pids(m)
         if len(pids) > 1:                      # never two trainers writing the same run
             for p in sorted(pids)[1:]:
                 os.kill(p, 9)

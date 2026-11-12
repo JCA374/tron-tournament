@@ -206,7 +206,8 @@ def worker(wpath, q, hp, seed, stop):
     net = make_net(3, hp["hidden"], value_head=True).eval()
     mtime = 0
     k = 0
-    while not stop.is_set():
+    parent = os.getppid()
+    while not stop.is_set() and os.getppid() == parent:      # exit if the learner is gone
         try:
             m = os.path.getmtime(wpath)
             if m != mtime:
@@ -215,7 +216,13 @@ def worker(wpath, q, hp, seed, stop):
         except Exception:
             time.sleep(1)
             continue
-        q.put(selfplay(net, hp, seed * 1000003 + k))
+        out = selfplay(net, hp, seed * 1000003 + k)
+        while not stop.is_set():
+            try:
+                q.put(out, timeout=5)
+                break
+            except Exception:
+                pass
         k += 1
 
 
@@ -269,7 +276,10 @@ def main():
             run.wait_if_paused()
         t0 = time.time()
         if workers:
-            samples, lens, _ = q.get()
+            try:
+                samples, lens, _ = q.get(timeout=10)       # a timeout so a stop signal is noticed
+            except Exception:
+                continue
         else:
             net.eval()
             samples, lens, _ = selfplay(net, HP, int(time.time() * 1000) % (1 << 30))
@@ -307,6 +317,10 @@ def main():
             break
     if stop:
         stop.set()
+        for w in workers:
+            w.join(timeout=60)
+            if w.is_alive():
+                w.terminate()
     save()
 
 
