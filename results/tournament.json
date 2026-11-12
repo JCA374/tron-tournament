@@ -1,38 +1,38 @@
 {
  "started": "2026-11-11T22:05:46.312792+01:00",
- "round": 14,
- "next_round_at": 1794457679.6031675,
+ "round": 15,
+ "next_round_at": 1794459483.440613,
  "models": {
   "ppo": {
    "status": "training",
    "cpus": "0",
    "cores": 1,
    "started_at": 1794431406.7766094,
-   "train": "82.0 M steps \u00b7 540 k games"
+   "train": "85.1 M steps \u00b7 560 k games"
   },
   "dqn": {
    "status": "training",
    "cpus": "1",
    "cores": 1,
    "started_at": 1794431406.8226235,
-   "train": "32.5 M steps \u00b7 351 k games"
+   "train": "33.6 M steps \u00b7 361 k games"
   },
   "neat": {
    "status": "training",
    "cpus": "2",
    "cores": 1,
    "started_at": 1794431406.8604777,
-   "train": "generation 1238 \u00b7 1.5 M games"
+   "train": "generation 1281 \u00b7 1.5 M games"
   },
   "cmaes": {
    "status": "training",
    "cpus": "3",
    "cores": 1,
    "started_at": 1794447520.268189,
-   "train": "generation 2497 \u00b7 799 k games"
+   "train": "generation 2550 \u00b7 816 k games"
   },
   "az": {
-   "status": "training",
+   "status": "paused",
    "cpus": "4",
    "cores": 1,
    "started_at": 1794431508.9267266,
@@ -44,6 +44,11 @@
    "id": "az",
    "from": "2026-11-12T02:33:36.921209+01:00",
    "to": "2026-11-12T04:34:01.595228+01:00"
+  },
+  {
+   "id": "az",
+   "from": "2026-11-12T05:35:10.155161+01:00",
+   "to": null
   }
  ],
  "knockouts_done": 0,
@@ -51,5 +56,5 @@
  "leader": "az",
  "restarts": {},
  "note": "",
- "processed_round": 14
+ "processed_round": 15
 }
