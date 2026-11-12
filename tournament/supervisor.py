@@ -215,6 +215,9 @@ def run_round(s, final=False):
     if not final and len(act) <= 2:
         # the duel: the random and avoid-walls bots lose every game, so they only cost search time
         cmd += ["--bots", "territory,space-filler"]
+        # retired models with frozen checkpoints: references that still take games off the finalists, so the scale
+        # stays tied to the pinned territory bot (both finalists beat that bot 20/20 in round 50)
+        cmd += ["--fixed", ",".join(m for m in IDS if s["models"][m]["status"] == "retired")]
     log = open(os.path.join(ROOT, "logs", "ranking.log"), "a")
     env = dict(os.environ, PYTHONPATH=ROOT, OMP_NUM_THREADS="1", NUMBA_NUM_THREADS="1")
     return subprocess.Popen(cmd, cwd=ROOT, stdout=log, stderr=subprocess.STDOUT, env=env)

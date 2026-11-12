@@ -74,6 +74,7 @@ def main():
     ap.add_argument("--ffa", type=int, default=0)
     ap.add_argument("--no-bots", action="store_true")
     ap.add_argument("--bots", default=",".join(b["id"] for b in config.BOTS), help="which fixed bots take part")
+    ap.add_argument("--fixed", default="", help="retired models that play with their frozen last checkpoint (references)")
     a = ap.parse_args()
     t0 = time.time()
     tag = "final" if a.final else f"r{a.round:04d}"
@@ -82,6 +83,13 @@ def main():
         s = snapshot(mid, tag)
         if s:
             specs[mid] = s
+    import glob
+    for mid in [m for m in a.fixed.split(",") if m]:
+        for p in sorted(glob.glob(os.path.join(RES, "rounds", "round_*.json")), reverse=True):
+            sp = json.load(open(p))["specs"].get(mid)
+            if sp and os.path.exists(os.path.join(ROOT, sp["path"])):
+                specs[mid] = sp                    # frozen: the checkpoint from its last ranking round
+                break
     if not a.no_bots:
         for b in config.BOTS:
             if b["id"] in a.bots.split(","):
