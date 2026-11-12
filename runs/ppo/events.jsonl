@@ -7,3 +7,5 @@
 {"t": "2026-11-12 12:40", "kind": "resume", "note": "iteration 20661, 169,254,912 steps"}
 {"t": "2026-11-12 21:38", "kind": "change", "what": "learning rate 3e-4 -> 1e-4", "reason": "Flat for about 12 hours (rounds 23-46): it beats the territory bot 90-100% but loses 70-90% to Mini-AlphaZero, with no trend. A lower learning rate lets it fine-tune instead of bouncing around a plateau.", "before": "learning rate 3e-4 since the start (170 M+ moves)"}
 {"t": "2026-11-12 21:38", "kind": "resume", "note": "iteration 33727, 276,291,584 steps"}
+{"t": "2026-11-12 21:58", "kind": "resume", "note": "iteration 34165, 279,879,680 steps"}
+{"t": "2026-11-12 22:00", "kind": "change", "what": "territory bonus + 15% of practice games against Mini-AlphaZero's network", "reason": "The duel phase: paid step by step for gaining space on the opponent (potential-based shaping on the territory score, weight 1.0), so an early cut-off is rewarded right away, not only at the end of the game.", "before": "reward only +1 win / -1 loss; opponents: old selves, territory bot, avoid-walls bot"}
