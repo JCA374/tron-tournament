@@ -1,0 +1,184 @@
+{
+ "round": 40,
+ "t": "2026-11-12T18:15:31+0100",
+ "ids": [
+  "ppo",
+  "az",
+  "territory",
+  "neat",
+  "dqn",
+  "space-filler",
+  "avoid-walls",
+  "random"
+ ],
+ "ratings": {
+  "ppo": 2260.0098984220485,
+  "dqn": 1837.8119790594185,
+  "neat": 1914.7766307066197,
+  "az": 2250.7381814002865,
+  "territory": 2001.6,
+  "space-filler": 1737.6390616751942,
+  "avoid-walls": 1415.7412799067697,
+  "random": 1117.5022598874339
+ },
+ "score": [
+  [
+   null,
+   0.45,
+   1.0,
+   0.85,
+   1.0,
+   0.9,
+   1.0,
+   1.0
+  ],
+  [
+   0.55,
+   null,
+   0.9,
+   0.8,
+   0.95,
+   0.95,
+   1.0,
+   1.0
+  ],
+  [
+   0.0,
+   0.1,
+   null,
+   0.8,
+   0.65,
+   1.0,
+   1.0,
+   1.0
+  ],
+  [
+   0.15,
+   0.2,
+   0.2,
+   null,
+   0.8,
+   0.6,
+   0.975,
+   1.0
+  ],
+  [
+   0.0,
+   0.05,
+   0.35,
+   0.2,
+   null,
+   0.8,
+   0.975,
+   1.0
+  ],
+  [
+   0.1,
+   0.05,
+   0.0,
+   0.4,
+   0.2,
+   null,
+   0.95,
+   1.0
+  ],
+  [
+   0.0,
+   0.0,
+   0.0,
+   0.025,
+   0.025,
+   0.05,
+   null,
+   0.95
+  ],
+  [
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.05,
+   null
+  ]
+ ],
+ "field_score": {
+  "ppo": 0.8857142857142858,
+  "dqn": 0.48214285714285715,
+  "neat": 0.5607142857142857,
+  "az": 0.8785714285714284,
+  "territory": 0.6500000000000001,
+  "space-filler": 0.38571428571428573,
+  "avoid-walls": 0.15,
+  "random": 0.0071428571428571435
+ },
+ "games": 560,
+ "games_per_pair": 20,
+ "specs": {
+  "ppo": {
+   "kind": "ppo",
+   "path": "results/snapshots/ppo_r0040.play.pt",
+   "meta": {
+    "t": 1794502896.376153,
+    "steps": 232030208,
+    "games": 1191687,
+    "it": 28324
+   }
+  },
+  "dqn": {
+   "kind": "dqn",
+   "path": "results/snapshots/dqn_r0040.play.pt",
+   "meta": {
+    "t": 1794502813.9361546,
+    "steps": 76477760,
+    "games": 701719
+   }
+  },
+  "neat": {
+   "kind": "neat",
+   "path": "results/snapshots/neat_r0040.pkl",
+   "meta": {
+    "t": 1794502919.5100265,
+    "gen": 3457,
+    "games": 4147920
+   }
+  },
+  "az": {
+   "kind": "az",
+   "path": "results/snapshots/az_r0040.play.pt",
+   "meta": {
+    "t": 1794502841.1075068,
+    "games": 11504,
+    "positions": 3536520
+   }
+  },
+  "territory": {
+   "kind": "territory"
+  },
+  "space-filler": {
+   "kind": "space-filler"
+  },
+  "avoid-walls": {
+   "kind": "avoid-walls"
+  },
+  "random": {
+   "kind": "random"
+  }
+ },
+ "highlights": [
+  {
+   "path": "results/replays/r0040_hl0.json",
+   "caption": "PPO vs Mini-AlphaZero (#1 vs #2), longest game: Mini-AlphaZero wins after 370 ticks"
+  },
+  {
+   "path": "results/replays/r0040_hl1.json",
+   "caption": "PPO vs NEAT (#1 vs #3), longest game: NEAT wins after 351 ticks"
+  },
+  {
+   "path": "results/replays/r0040_hl2.json",
+   "caption": "DQN (last place) \u2014 its longest win: DQN wins after 285 ticks"
+  }
+ ],
+ "seconds": 716.7
+}
