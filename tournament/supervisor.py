@@ -407,7 +407,8 @@ def main():
                 s["knockouts_done"] += 1
                 knockout(s, s["knockouts_done"])
             ensure_trainers(s)
-            if ranking is None and time.time() >= s["next_round_at"] and now() < final_t:
+            if (ranking is None and time.time() >= s["next_round_at"] and now() < final_t
+                    and not pgrep("^" + PY + " -m tournament.ranking")):     # never two rounds at once (e.g. after a restart)
                 ranking = run_round(s)
                 s["next_round_at"] = time.time() + config.ROUND_EVERY_MIN * 60
             for m in IDS:
