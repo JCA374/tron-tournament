@@ -1,14 +1,14 @@
 {
  "started": "2026-11-11T22:05:46.312792+01:00",
- "round": 48,
- "next_round_at": 1794519322.1267965,
+ "round": 49,
+ "next_round_at": 1794521134.7727778,
  "models": {
   "ppo": {
    "status": "training",
    "cpus": "0-3",
    "cores": 4,
    "started_at": 1794517089.275972,
-   "train": "284.0 M steps \u00b7 1.4 M games"
+   "train": "286.1 M steps \u00b7 1.4 M games"
   },
   "dqn": {
    "status": "retired",
