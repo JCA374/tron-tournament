@@ -18,7 +18,8 @@ HP = dict(hidden=32, popsize=32, sigma0=0.5, hof_size=6, n_bot_space=4, n_bot_av
 
 
 # settings changed during the tournament (they win over the values saved in the checkpoint); see the log
-OVERRIDE = dict(n_bot_space=2, n_bot_avoid=0, n_hof_games=2, rivals=["ppo", "dqn", "neat"], n_rival_games=6)
+OVERRIDE = dict(n_bot_space=2, n_bot_avoid=0, n_hof_games=2, rivals=["ppo", "dqn", "neat"], n_rival_games=6,
+                sigma_restarts=1, restart_sigma=0.3)
 
 
 def load_agent(path):
@@ -55,6 +56,14 @@ def main():
         HP.update({k: v for k, v in s["hp"].items() if k not in OVERRIDE})
         HP.update(OVERRIDE)
         run.event("resume", note=f"generation {gen}")
+        if s["hp"].get("sigma_restarts", 0) < OVERRIDE.get("sigma_restarts", 0):
+            # restart: same centre (the current best weights), fresh step size and covariance
+            old_sigma = float(es.sigma)
+            es = cma.CMAEvolutionStrategy(np.asarray(es.mean), OVERRIDE["restart_sigma"],
+                                          {"popsize": HP["popsize"], "verbose": -9, "seed": gen + 1})
+            HP["sigma_restarts"] = OVERRIDE["sigma_restarts"]
+            run.event("change", what=f"restarted the search: step size {old_sigma:.4f} -> {OVERRIDE['restart_sigma']}",
+                      reason="see the log", before=f"step size {old_sigma:.4f}")
     else:
         n = evo.n_params(HP["hidden"])
         es = cma.CMAEvolutionStrategy(np.zeros(n), HP["sigma0"], {"popsize": HP["popsize"], "verbose": -9, "seed": 1})
