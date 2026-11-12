@@ -12,6 +12,13 @@
 <p class="lede">What this tournament taught, written down as it happens, newest first. Some are about the methods,
 some about running a two-day experiment unattended.</p>
 
+<div class="lesson"><h3>A yardstick everyone beats every time stops measuring</h3>
+<p>Thursday 01:32. Round 7 put Mini-AlphaZero up 290 points and PPO up 247 in a single round. But the top four had beaten the pinned
+space-filler bot 20 out of 20. Against a perfect score the fit only knows "much stronger", and the scale floats: the jump was mostly the
+ruler stretching, not the models. The order between the models was still sound, because they play each other 20 games per pair.</p>
+<p><b>Fix:</b> a stronger fixed bot (territory) joined in round 8 and became the pinned reference. <b>Lesson:</b> the reference
+point of a rating scale must still win some games, or it has to be replaced before it stops working.</p></div>
+
 <div class="lesson"><h3>A process watcher must be tested against itself</h3>
 <p>Wednesday 22:01–22:05. The supervisor checks with <code>pgrep -f</code> whether each trainer is running. Its pattern began with
 <code>-m models…</code>, and pgrep read that as one of its own options, so it never found a trainer and started a new copy of

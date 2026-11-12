@@ -103,7 +103,17 @@ def main():
                 order = list(np.random.default_rng(k).permutation(fids))
                 fj.append(([specs[i] for i in order], order, base + 777_000 + k))
             ffa = list(pool.imap_unordered(_ffa_job, fj))
-    ratings = bradley_terry(ids, [(x, y, s) for x, y, s, _ in res], anchor=config.ANCHOR)
+    # The scale is pinned to a fixed bot. Space-filler first; once every top model beat it 20/20 the scale drifted, so the
+    # stronger territory bot was added: rated on the old scale in its first round, then pinned at that value.
+    anchor_p = os.path.join(RES, "anchor.json")
+    games_ = [(x, y, s) for x, y, s, _ in res]
+    if os.path.exists(anchor_p):
+        an = json.load(open(anchor_p))
+        ratings = bradley_terry(ids, games_, anchor=(an["id"], an["value"]))
+    else:
+        ratings = bradley_terry(ids, games_, anchor=config.ANCHOR)
+        if "territory" in ratings and not a.final:
+            json.dump({"id": "territory", "value": round(ratings["territory"], 1), "since_round": a.round}, open(anchor_p, "w"))
     k = {p: n for n, p in enumerate(ids)}
     sc = np.zeros((len(ids), len(ids)))
     cnt = np.zeros((len(ids), len(ids)))

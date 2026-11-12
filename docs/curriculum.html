@@ -31,7 +31,11 @@ time is the competition itself: who's still in, who's paused, and how much CPU e
 fixed bots: <b>random</b>, <b>avoid-walls</b> (a random move that doesn't crash this tick) and <b>space-filler</b> (always the move
 with the most reachable free cells). That's 20 games per pair (10 start positions × both sides), 560 games in a round with all five models.</p>
 <p>Ratings come from a <b>Bradley–Terry</b> fit (the model behind Elo) to that round's games only, with a draw counted as half a win.
-Since the bots never change, the space-filler bot is pinned at 1500 and the ratings of different rounds are on the same scale.</p>
+Since the bots never change, one of them is pinned so the ratings of different rounds are on the same scale. That was the space-filler
+bot at 1500 until round 7, when the top four models beat it 20 out of 20. A perfect score can't tell how much stronger you are, so the
+scale started drifting upwards. From round 8 a fourth bot plays too: the <b>territory bot</b>, which always picks the move that leaves the
+most cells closer to it than to the opponent (the classic Tron heuristic; it beats the space-filler 39 out of 40). It's rated on the
+old scale in its first round and pinned at that value from then on.</p>
 </div>
 
 <h2>The catch-up rule</h2>

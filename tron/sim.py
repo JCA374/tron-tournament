@@ -321,4 +321,12 @@ def bot_space_filler(state, b, rng):
     return int(space_filler_core(state["grid"], state["pos"][b, 0], state["pos"][b, 1], state["dirs"][b]))
 
 
-BOTS = {"random": bot_random, "avoid-walls": bot_avoid_walls, "space-filler": bot_space_filler}
+def bot_territory(state, b, rng):
+    """The classic Tron heuristic: the move that leaves the most cells closer to you than to any opponent
+    (territory, a Voronoi split by breadth-first search); ties go to the most reachable cells, then straight."""
+    _, f = observe(state, b)
+    key = [f[11 + a] * 10_000 + f[8 + a] + (1e-6 if a == 1 else 0) for a in range(3)]
+    return int(np.argmax(key))
+
+
+BOTS = {"territory": bot_territory, "random": bot_random, "avoid-walls": bot_avoid_walls, "space-filler": bot_space_filler}

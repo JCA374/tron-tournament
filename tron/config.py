@@ -7,12 +7,13 @@ CONTESTANTS = [
     {"id": "az", "label": "Mini-AlphaZero", "color": "#f03e3e", "method": "tree search guided by a small network"},
 ]
 BOTS = [
+    {"id": "territory", "label": "Territory bot", "color": "#495057", "method": "claims the most space before the opponent (added Thu 01:45)"},
     {"id": "space-filler", "label": "Space-filler bot", "color": "#868e96", "method": "picks the move with the most free cells"},
     {"id": "avoid-walls", "label": "Avoid-walls bot", "color": "#adb5bd", "method": "random move that doesn't crash now"},
     {"id": "random", "label": "Random bot", "color": "#ced4da", "method": "random moves"},
 ]
 BY_ID = {m["id"]: m for m in CONTESTANTS + BOTS}
-ANCHOR = ("space-filler", 1500.0)
+ANCHOR = ("space-filler", 1500.0)   # until results/anchor.json exists: then the territory bot is pinned instead
 
 SCHEDULE = [
     {"t": "2026-11-12T12:00:00+01:00", "kind": "knockout", "label": "knockout 1 (Thu 12:00)"},

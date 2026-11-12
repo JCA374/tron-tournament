@@ -45,8 +45,17 @@ class NeatPolicy:
         return np.asarray(self.net.activate(f.tolist()))
 
 
+_AGENTS = {}
+
+
 def make_policy(blob):
     kind = blob[0]
+    if kind == "agent":                    # another contestant's frozen checkpoint (plays through its own act())
+        key = blob[1]["path"]
+        if key not in _AGENTS:
+            from models.common import load_agent
+            _AGENTS[key] = load_agent(blob[1])
+        return _AGENTS[key]
     if kind == "mlp":
         return MLPPolicy(blob[1], blob[2])
     if kind == "neat":
@@ -79,6 +88,8 @@ def play(me, opp, seed, side, rng):
         acts[b_me] = int(np.argmax(me(f)))
         if isinstance(opp, str):
             acts[b_op] = sim.BOTS[opp](st, b_op, rng)
+        elif hasattr(opp, "act"):
+            acts[b_op] = opp.act(st, b_op)
         else:
             _, fo = sim.observe(st, b_op)
             acts[b_op] = int(np.argmax(opp(fo)))
