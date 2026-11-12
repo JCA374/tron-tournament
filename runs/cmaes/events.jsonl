@@ -2,3 +2,5 @@
 {"t": "2026-11-11 22:10", "kind": "resume", "note": "generation 51"}
 {"t": "2026-11-12 00:38", "kind": "change", "what": "practise against the other contestants", "reason": "Stalled around 1600 for five rounds (1658, 1628, 1561, 1648, 1584) while the others reached 1830-1910; its best fitness had flattened at about 1.0 because its opponents (two bots and its own past champions) no longer push it.", "before": "10 games per candidate: 4 vs space-filler, 2 vs avoid-walls, 4 vs its own hall of fame. Now: 2 vs space-filler, 2 vs its hall of fame, 6 vs the newest ranking-round checkpoints of PPO, DQN and NEAT (2 each; Mini-AlphaZero left out because its search is too slow for 320 games a generation). Note: fitness values before and after are not comparable."}
 {"t": "2026-11-12 00:39", "kind": "resume", "note": "generation 1236"}
+{"t": "2026-11-12 02:38", "kind": "resume", "note": "generation 1811"}
+{"t": "2026-11-12 02:38", "kind": "change", "what": "restarted the search: step size 0.0040 -> 0.3", "reason": "see the log", "before": "step size 0.0040"}
