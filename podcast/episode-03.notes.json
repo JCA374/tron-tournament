@@ -1,0 +1,5 @@
+["02:33: first catch-up pause: Mini-AlphaZero 110 points ahead (two-round average), training paused",
+ "Round 7 jump (+290, +247) was mostly scale drift: the top four beat the 1500-pinned space-filler bot 20/20",
+ "New pinned yardstick from round 8: territory bot at 2002; in round 9 it ranks second",
+ "Territory bot beats PPO 16/20, DQN and CMA-ES 19/20; loses to Mini-AlphaZero (8/20) and NEAT (6/20)",
+ "CMA-ES: change 1 (rival opponents) didn't help; change 2 at 02:38 restarted its frozen search (step size 0.004 to 0.3)"]

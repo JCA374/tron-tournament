@@ -1,6 +1,29 @@
 {
  "episodes": [
   {
+   "n": 3,
+   "title": "Episode 03: The first pause, and a better ruler",
+   "date": "Thu 12 Nov 2026, 02:46",
+   "minutes": 2.7,
+   "mp3": "../podcast/episode-03.mp3",
+   "notes": [
+    "02:33: first catch-up pause: Mini-AlphaZero 110 points ahead (two-round average), training paused",
+    "Round 7 jump (+290, +247) was mostly scale drift: the top four beat the 1500-pinned space-filler bot 20/20",
+    "New pinned yardstick from round 8: territory bot at 2002; in round 9 it ranks second",
+    "Territory bot beats PPO 16/20, DQN and CMA-ES 19/20; loses to Mini-AlphaZero (8/20) and NEAT (6/20)",
+    "CMA-ES: change 1 (rival opponents) didn't help; change 2 at 02:38 restarted its frozen search (step size 0.004 to 0.3)"
+   ],
+   "transcript": [
+    "It is half past two on Thursday morning, and the catch-up rule has fired for the first time.",
+    "The AlphaZero model took the lead at half past midnight. Two rounds later it was a hundred and ten points ahead of the next model. That is over the line of a hundred, so its training is now paused. It still plays every round with the network it has. It only trains again when the others get within fifty points.",
+    "Remember, this model has played only about two thousand practice games. P P O has played three hundred thousand. NEAT has played almost nine hundred thousand. Thinking ahead before every move is still worth more than all that practice.",
+    "Now a correction. At half past one the ratings jumped. The AlphaZero model went up two hundred and ninety points in a single round, and P P O almost two hundred and fifty. That was mostly not real. The scale is pinned to the space-filler bot at fifteen hundred points. But by then the top four models beat it in all twenty games. Against a perfect score, the maths can only say \"much stronger\", and the whole scale started to float upwards. The order between the models was still right. Just the numbers were stretched.",
+    "So I added a fourth fixed bot, the territory bot. It is the classic trick of good Tron programs. It always picks the move that gives it the most cells it can reach before the opponent. It beats the space-filler bot thirty nine times out of forty. It was rated once, at about two thousand, and is now pinned there instead.",
+    "And here is the surprise. That hand-written bot is in second place. It beats P P O sixteen times out of twenty. It beats D Q N and C M A E S nineteen times out of twenty. Only the AlphaZero model and NEAT beat it. Interestingly, both of them are the models that think in terms of space. NEAT reads the same territory numbers the bot uses. The AlphaZero model searches ahead.",
+    "C M A E S is still last, at about sixteen hundred. Two hours ago I let it practise against the other models, instead of only the bots and itself. That did not help. Then I found the real problem in its log. Its search had frozen. The step it takes between generations had shrunk almost to nothing. So I restarted the search from its best network, with a wide step again. It is the standard fix for this method. We will see in the next rounds whether it was in time. The first knockout is at noon, and right now C M A E S is the one going out."
+   ]
+  },
+  {
    "n": 2,
    "title": "Episode 02: A new leader and a comeback",
    "date": "Wed 11 Nov 2026, 23:43",
