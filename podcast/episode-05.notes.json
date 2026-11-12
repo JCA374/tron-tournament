@@ -1,0 +1,5 @@
+["Knockout 1 (Thu 12:00, three-round average): PPO 2203, Mini-AlphaZero 2188, NEAT 1960, DQN 1947, CMA-ES 1811: CMA-ES is out",
+ "CMA-ES led round 1, then stalled; two changes (rival opponents, search restart) came too late",
+ "PPO and Mini-AlphaZero swapped the lead four times since 09:00",
+ "Every remaining model now trains on 2 cores; two multi-core bugs were caught and fixed 20 minutes before",
+ "Knockout 2: Fri 06:00, currently NEAT vs DQN, 13 points apart"]
