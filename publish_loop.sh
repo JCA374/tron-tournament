@@ -4,6 +4,6 @@ cd "$(dirname "$0")"
 mkdir -p logs
 echo $$ > publish_loop.pid
 while true; do
-  PYTHONPATH=. nice -n 15 taskset -c 5-7 .venv/bin/python publish.py --push >> logs/publish.log 2>&1
+  PYTHONPATH=. nice -n 10 taskset -c 0-7 .venv/bin/python publish.py --push >> logs/publish.log 2>&1
   sleep 900
 done

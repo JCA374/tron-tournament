@@ -231,7 +231,7 @@ def after_round(s):
         return
     rnd = json.load(open(p))
     tournament_stats(rnd)
-    if s["round"] % 4 == 1 or not os.path.exists(os.path.join(RES, "play_models.json")):
+    if s["round"] % 8 == 1 or not os.path.exists(os.path.join(RES, "play_models.json")):
         try:
             from tournament.play import update_play_files
             lead_now = max((m for m in active(s) if m in rnd["ratings"]), key=lambda m: rnd["ratings"][m], default=None)
