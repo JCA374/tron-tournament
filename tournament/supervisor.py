@@ -207,7 +207,8 @@ def run_round(s, final=False):
     act = active(s) if not final else [m for m in IDS if s["models"][m]["status"] == "finalist"]
     per, rank_cpus = cpu_plan(len(active(s)))
     procs = 8 if final else (3 if len(act) >= 5 else 2)
-    cmd = ["nice", "-n", "10", "taskset", "-c", "0-7" if final else rank_cpus, PY, "-m", "tournament.ranking",
+    # normal priority: at nice 10 on a fully loaded machine Mini-AlphaZero's 128-simulation games starved (rounds > 1 hour)
+    cmd = ["nice", "-n", "0" if len(act) <= 2 else "10", "taskset", "-c", "0-7" if final else rank_cpus, PY, "-m", "tournament.ranking",
            "--models", ",".join(act), "--procs", str(procs)]
     cmd += (["--final", "--games", "200", "--ffa", "50" if len(act) >= 3 else "0", "--no-bots"] if final
             else ["--round", str(s["round"])])

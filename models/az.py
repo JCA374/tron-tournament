@@ -10,6 +10,7 @@ import os
 import time
 
 import numpy as np
+from numba import njit
 import torch
 import torch.nn.functional as F
 
@@ -57,16 +58,28 @@ def terminal_values(state, prev_alive):
     return v
 
 
-def select(node, c):
-    """Each live bike picks its move by PUCT on its own statistics."""
-    st = node.state
-    acts = np.ones(len(st["alive"]), np.int32)
-    for b in np.flatnonzero(st["alive"]):
-        n = node.N[b]
-        q = np.where(n > 0, node.W[b] / np.maximum(n, 1), 0.0)
-        u = c * node.P[b] * math.sqrt(n.sum() + 1) / (1 + n)
-        acts[b] = int(np.argmax(q + u))
+@njit(cache=True)
+def _select_core(N, W, P, alive, c):
+    B = N.shape[0]
+    acts = np.ones(B, np.int32)
+    for b in range(B):
+        if not alive[b]:
+            continue
+        tot = N[b, 0] + N[b, 1] + N[b, 2]
+        sq = math.sqrt(tot + 1)
+        best, best_v = 0, -1e18
+        for a in range(3):
+            q = W[b, a] / N[b, a] if N[b, a] > 0 else 0.0
+            v = q + c * P[b, a] * sq / (1 + N[b, a])
+            if v > best_v:
+                best_v, best = v, a
+        acts[b] = best
     return acts
+
+
+def select(node, c):
+    """Each live bike picks its move by PUCT on its own statistics (numba: numpy on 3-element arrays was the hot spot)."""
+    return _select_core(node.N, node.W, node.P, node.state["alive"], c)
 
 
 def leaf_obs(state):
@@ -147,17 +160,31 @@ def _expand(nodes, net):
 
 
 class AZAgent:
-    """Tournament agent: a fresh tree search of eval_sims simulations for every move."""
+    """Tournament agent: eval_sims simulations per move. The subtree of the position that actually happened is kept from
+    the previous move, so its simulations count toward the budget (same depth, about half the work)."""
 
     def __init__(self, net, sims, c):
         self.net, self.sims, self.c, self.name = net.eval(), sims, c, "az"
+        self.root = None
 
     def reset(self):
-        pass
+        self.root = None
+
+    def _reuse(self, state):
+        if self.root is None:
+            return None
+        for child in self.root.children.values():
+            cs = child.state
+            if (not child.terminal and child.expanded and cs["t"] == state["t"] and np.array_equal(cs["pos"], state["pos"])
+                    and np.array_equal(cs["dirs"], state["dirs"]) and np.array_equal(cs["alive"], state["alive"])):
+                return child
+        return None
 
     def act(self, state, b):
-        root = Node(copy_state(state))
-        run_search([root], self.net, self.sims, self.c)
+        root = self._reuse(state) or Node(copy_state(state))
+        done = int(root.N[b].sum())
+        run_search([root], self.net, max(8, self.sims - done), self.c)
+        self.root = root
         return int(np.argmax(root.N[b] + 1e-3 * root.P[b]))
 
 
@@ -168,7 +195,7 @@ def load_agent(path, sims=None):
     return AZAgent(net, sims or ck["hp"]["eval_sims"], ck["hp"]["c_puct"])
 
 
-def selfplay(net, hp, seed, opp_net=None):
+def selfplay(net, hp, seed, opp_net=None, stop=None):
     """Play hp['parallel_games'] 1v1 self-play games at once. Returns samples (win, feat, pi, z) and game lengths.
     With opp_net (PPO's newest network), one bike in every game is PPO instead (its side alternates); the search still
     models both bikes, and only Mini-AlphaZero's own moves become training samples."""
@@ -179,6 +206,8 @@ def selfplay(net, hp, seed, opp_net=None):
     hist = [[] for _ in range(K)]
     done = [None] * K
     while any(d is None for d in done):
+        if stop is not None and stop.is_set():          # a 128-simulation batch takes minutes: stop mid-batch
+            return [], [], {"vs_ppo": False, "score": []}
         live = [i for i in range(K) if done[i] is None]
         run_search([roots[i] for i in live], net, hp["sims"], hp["c_puct"], noise=(hp["dir_alpha"], hp["dir_frac"]))
         for i in live:
@@ -237,7 +266,7 @@ def worker(wpath, q, hp, seed, stop):
                 opp.load_state_dict(torch.load(PPO_PATH, weights_only=False)["net"])
             except Exception:
                 opp = None
-        out = selfplay(net, hp, seed * 1000003 + k, opp)
+        out = selfplay(net, hp, seed * 1000003 + k, opp, stop)
         while not stop.is_set():
             try:
                 q.put(out, timeout=5)
