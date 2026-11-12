@@ -8,28 +8,28 @@
    "cpus": "0",
    "cores": 1,
    "started_at": 1794461941.3902547,
-   "train": "158.6 M steps \u00b7 894 k games"
+   "train": "161.1 M steps \u00b7 904 k games"
   },
   "dqn": {
    "status": "training",
    "cpus": "1",
    "cores": 1,
    "started_at": 1794461941.4114661,
-   "train": "57.7 M steps \u00b7 554 k games"
+   "train": "58.6 M steps \u00b7 562 k games"
   },
   "neat": {
    "status": "training",
    "cpus": "2",
    "cores": 1,
    "started_at": 1794461941.444731,
-   "train": "generation 2255 \u00b7 2.7 M games"
+   "train": "generation 2290 \u00b7 2.7 M games"
   },
   "cmaes": {
    "status": "training",
    "cpus": "3",
    "cores": 1,
    "started_at": 1794447520.268189,
-   "train": "generation 3824 \u00b7 1.2 M games"
+   "train": "generation 3871 \u00b7 1.2 M games"
   },
   "az": {
    "status": "training",
@@ -53,8 +53,8 @@
  ],
  "knockouts_done": 0,
  "final_done": false,
- "leader": "ppo",
+ "leader": "az",
  "restarts": {},
  "note": "",
- "processed_round": 26
+ "processed_round": 27
 }
