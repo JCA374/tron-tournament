@@ -2,3 +2,4 @@
 {"t": "2026-11-11 22:10", "kind": "resume", "note": "generation 15"}
 {"t": "2026-11-12 06:38", "kind": "change", "what": "main training bot: space-filler -> territory bot", "reason": "Flat for ten rounds (rounds 8-17, about five hours) while the hand-written territory bot (fixed at 2002) still beats it; its main bot opponent, the space-filler, had become too easy (PPO won 97% of those training games).", "before": "4 of 10 fitness games vs the space-filler bot; now the same share against the territory bot. Everything else unchanged."}
 {"t": "2026-11-12 06:39", "kind": "resume", "note": "generation 1457"}
+{"t": "2026-11-12 12:00", "kind": "resume", "note": "generation 2327"}
