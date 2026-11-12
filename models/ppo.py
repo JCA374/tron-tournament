@@ -18,7 +18,7 @@ HP = dict(n_envs=64, n_steps=128, gamma=0.99, lam=0.95, clip=0.2, lr=3e-4, ent=0
           snapshot_every=25, pool_size=12, p_bot_space=0.15, p_bot_avoid=0.05, hidden=128)
 
 # settings changed during the tournament (they win over the values saved in the checkpoint); see the log
-OVERRIDE = dict(bot_main="territory")
+OVERRIDE = dict(bot_main="territory", lr=1e-4)
 
 
 def load_agent(path):
@@ -47,6 +47,8 @@ def main():
         HP.update(OVERRIDE)
         net.load_state_dict(ck["net"])
         opt.load_state_dict(ck["opt"])
+        for g in opt.param_groups:          # the saved optimizer carries the old learning rate
+            g["lr"] = HP["lr"]
         it, steps, games, pool = ck["it"], ck["steps"], ck["games"], ck["pool"]
         run.event("resume", note=f"iteration {it}, {steps:,} steps")
     else:
