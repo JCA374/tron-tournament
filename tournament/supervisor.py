@@ -366,6 +366,11 @@ def final(s):
     f = json.load(open(fp))
     order = f["ids"]
     win = order[0]
+    if len(order) == 2 and abs(f["ratings"][order[0]] - f["ratings"][order[1]]) < 1e-6:
+        event("final", "The final ends in a tie", "Both finalists won the same number of games.")
+        s["final_done"] = True
+        s["note"] = "Final played: a tie."
+        return
     s["models"][win]["status"] = "winner"
     ffa = f.get("ffa", {})
     event("final", f"🏆 {LBL[win]} wins the Tron Tournament",

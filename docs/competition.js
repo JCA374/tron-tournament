@@ -20,6 +20,13 @@ const sign = (v) => v == null ? '' : (v > 0 ? '+' : '') + Math.round(v);
   tick(c.schedule); setInterval(() => tick(c.schedule), 30000);
   $('updated').textContent = `Updated ${c.updated}. ${c.rounds} ranking round(s) played. ${c.note || ''}`;
   const models = c.models || [];
+  if (c.final) {
+    const F = c.final, L = (id) => (models.find((m) => m.id === id) || { label: id }), [a, b] = F.ids;
+    $('finalbox').innerHTML = `<div class="finalbox"><div class="k">🏆 The final · ${F.games} games</div>
+      <div class="fs"><span style="color:${L(a).color}">${esc(L(a).label)}</span> <b>${F.wins[a] || 0}</b> – <b>${F.wins[b] || 0}</b>
+      <span style="color:${L(b).color}">${esc(L(b).label)}</span></div>
+      <div class="muted">${F.draws} draws · ${F.winner ? `winner: <b>${esc(L(F.winner).label)}</b>` : '<b>a tie</b>'} · <a href="play.html?final=1">watch every game of the final in the Arena →</a></div></div>`;
+  }
   const leader = models.find((m) => !m.bot && m.rating != null);
   $('cards').innerHTML = [
     ['Leader', leader ? leader.label : '–', leader ? `rating ${Math.round(leader.rating)}` : 'no round yet'],

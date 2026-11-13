@@ -1,6 +1,7 @@
 // Arena: replays games from data/arena.json (start positions + moves) with the same rules as the Python simulator.
 (async function () {
   const A = await get('arena.json');
+  const FIN = await get('final.json');            // exists once the final has been played
   const cv = $('board'), ctx = cv.getContext('2d');
   if (!A) { $('meta').textContent = 'The arena library is being built. Check back in a few minutes.'; return; }
   const N = A.board, S = N + 2;
@@ -23,6 +24,12 @@
   });
   $('fight').onclick = () => { mode = 'pair'; load(); };
   $('ffa').onclick = () => { mode = 'ffa'; load(); };
+  if (FIN && FIN.games.length) {
+    const fb = document.createElement('button'); fb.className = 'fight'; fb.id = 'finalbtn';
+    fb.textContent = `🏆 Watch the final (${FIN.games.length} games)`;
+    fb.onclick = () => { mode = 'final'; load(); };
+    $('ffa').after(fb);
+  }
   $('next').onclick = () => { if (list.length) { gi = (gi + 1) % list.length; start(); } };
   $('replay').onclick = () => start();
   $('play').onclick = () => { playing = !playing; $('play').textContent = playing ? '⏸ Pause' : '▶ Play'; };
@@ -31,7 +38,8 @@
     [...$('speeds').children].forEach((x) => x.classList.toggle('on', x === b)); };
 
   function load() {
-    if (mode === 'ffa') list = A.ffa.slice();
+    if (mode === 'final') { list = FIN.games.slice(); const ids = list[0].ids; pick = [ids[0], ids[1]].sort(); drawPick(); }
+    else if (mode === 'ffa') list = A.ffa.slice();
     else list = (A.pairs[[...pick].sort().join('|')] || []).slice();
     gi = 0;
     series();
@@ -48,7 +56,7 @@
     }
     const [a, b] = pick, wa = list.filter((g) => g.result >= 0 && g.ids[g.result] === a).length,
       wb = list.filter((g) => g.result >= 0 && g.ids[g.result] === b).length, d = list.length - wa - wb;
-    $('series').innerHTML = `<div class="k">Series · ${list.length} games</div>
+    $('series').innerHTML = `<div class="k">${mode === 'final' ? '🏆 The final' : 'Series'} · ${list.length} games</div>
       <div class="score"><span style="color:${E[a].color}">${esc(E[a].label)}</span> <b>${wa}</b> – <b>${wb}</b> <span style="color:${E[b].color}">${esc(E[b].label)}</span></div>
       ${d ? `<div class="muted small">${d} draw${d > 1 ? 's' : ''}</div>` : ''}`;
   }
@@ -219,5 +227,6 @@
     cv.width = cv.height = px;
   }
   window.addEventListener('resize', fit);
+  if (FIN && new URLSearchParams(location.search).get('final')) mode = 'final';
   fit(); drawPick(); load(); requestAnimationFrame(frame);
 })();

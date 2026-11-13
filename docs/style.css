@@ -143,3 +143,7 @@ button.fight { background: linear-gradient(90deg, #4c6ef5, #f03e3e); color: #fff
 .ctl button { border: 1px solid var(--line); background: var(--panel); color: var(--ink); border-radius: 8px; padding: 5px 10px; cursor: pointer; font: inherit; font-size: .88rem; }
 .ctl button.on { background: var(--accent); color: var(--panel); border-color: var(--accent); }
 .tog { font-size: .9rem; }
+.finalbox { margin: 18px 0 6px; padding: 16px 20px; border-radius: 14px; border: 2px solid var(--accent);
+  background: linear-gradient(135deg, rgba(76,110,245,.12), rgba(240,62,62,.12)); }
+.finalbox .k { color: var(--muted); font-size: .8rem; text-transform: uppercase; letter-spacing: .06em; }
+.finalbox .fs { font-size: 1.6rem; font-weight: 750; margin: 4px 0; } .finalbox .fs b { font-size: 2.1rem; }

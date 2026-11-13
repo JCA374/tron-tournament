@@ -97,9 +97,38 @@ def extra(data_dir):
                     print('highlight render failed', ex)
                     continue
             reps.append({'src': f'replays/{name}', 'caption': r['caption']})
-    comp = {'updated': time.strftime('%Y-%m-%d %H:%M'), 'schedule': config.SCHEDULE, 'rounds': len(hist),
+    comp_final = _final(data_dir)
+    comp = {'updated': time.strftime('%Y-%m-%d %H:%M'), 'schedule': config.SCHEDULE, 'rounds': len(hist), 'final': comp_final,
             'games': sum(h.get('games', 0) for h in hist), 'note': state.get('note', ''),
             'models': rows, 'history': hist, 'pauses': state.get('pauses', []),
             'h2h': {'round': last['round'], 'ids': last['ids'], 'score': last['score']} if last else None,
             'replays': reps, 'events': timeline[:200]}
     json.dump(comp, open(os.path.join(data_dir, 'competition.json'), 'w'), separators=(',', ':'))
+
+
+def _final(data_dir):
+    """The final (results/rounds/final.json + its replays): the series score for the Competition page, and every game in
+    the Arena's format (start positions + moves) as data/final.json so the Arena can replay the whole final."""
+    import gzip
+    fp = os.path.join(RES, 'rounds', 'final.json')
+    gp = os.path.join(RES, 'replays', 'final_all.jsonl.gz')
+    if not os.path.exists(fp) or not os.path.exists(gp):
+        return None
+    from tron import sim
+    f = json.load(open(fp))
+    games, wins, draws = [], {}, 0
+    for line in gzip.open(gp, 'rt'):
+        r = json.loads(line)
+        st = sim.new_game(len(r['ids']), r['seed'])
+        games.append({'ids': r['ids'], 'seed': r['seed'], 'pos': st['pos'].tolist(), 'dirs': st['dirs'].tolist(),
+                      'acts': ''.join(''.join(map(str, a)) for a in r['actions']), 'result': r['result'], 'ticks': r['ticks']})
+        if r['result'] < 0:
+            draws += 1
+        else:
+            w = r['ids'][r['result']]
+            wins[w] = wins.get(w, 0) + 1
+    json.dump({'games': games}, open(os.path.join(data_dir, 'final.json'), 'w'), separators=(',', ':'))
+    order = f['ids']
+    return {'ids': order, 'ratings': {k: f['ratings'][k] for k in order}, 'wins': wins, 'draws': draws, 'games': len(games),
+            'winner': None if wins.get(order[0], 0) == wins.get(order[1], 0) else max(order, key=lambda k: wins.get(k, 0)),
+            't': f['t']}
