@@ -8,7 +8,7 @@
    "cpus": "0-3",
    "cores": 4,
    "started_at": 1794517089.275972,
-   "train": "341.7 M steps \u00b7 1.7 M games"
+   "train": "349.6 M steps \u00b7 1.8 M games"
   },
   "dqn": {
    "status": "retired",
