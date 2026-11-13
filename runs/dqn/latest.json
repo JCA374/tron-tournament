@@ -1,1 +1,1 @@
-{"kind": "dqn", "path": "runs/dqn/ckpt/latest.pt", "t": 1794431386.523262, "steps": 216640, "games": 31091}
+{"kind": "dqn", "path": "runs/dqn/ckpt/latest.play.pt", "t": 1794517085.1546228, "steps": 88305920, "games": 794989}
