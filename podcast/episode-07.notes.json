@@ -1,0 +1,5 @@
+["Mini-AlphaZero paused since Fri 00:22 (140 points ahead); its network is frozen",
+ "PPO trained alone overnight: ~170 M more moves (282 M -> 452 M)",
+ "15 duel rounds (23:14-06:13): Mini-AlphaZero scored ~83% vs PPO, 20/20 in rounds 57 and 58; 65% in the last two",
+ "PPO beats the territory bot 20/20 every round and the frozen NEAT/DQN 80-100%",
+ "Arena series (06:17): Mini-AlphaZero 12, PPO 2, 2 draws. Final: Fri 16:00, 200 games"]
