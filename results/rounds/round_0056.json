@@ -1,0 +1,140 @@
+{
+ "round": 56,
+ "t": "2026-11-13T02:13:36+0100",
+ "ids": [
+  "az",
+  "ppo",
+  "territory",
+  "dqn",
+  "neat",
+  "space-filler"
+ ],
+ "ratings": {
+  "ppo": 2281.8084727460778,
+  "az": 2533.562558863086,
+  "dqn": 1993.247693703115,
+  "neat": 1917.098615022186,
+  "territory": 2001.6,
+  "space-filler": 1577.8903432743516
+ },
+ "score": [
+  [
+   null,
+   0.8,
+   1.0,
+   1.0,
+   1.0,
+   1.0
+  ],
+  [
+   0.2,
+   null,
+   0.8,
+   0.9,
+   0.9,
+   1.0
+  ],
+  [
+   0.0,
+   0.2,
+   null,
+   0.5,
+   0.55,
+   1.0
+  ],
+  [
+   0.0,
+   0.1,
+   0.5,
+   null,
+   0.8,
+   0.8
+  ],
+  [
+   0.0,
+   0.1,
+   0.45,
+   0.2,
+   null,
+   1.0
+  ],
+  [
+   0.0,
+   0.0,
+   0.0,
+   0.2,
+   0.0,
+   null
+  ]
+ ],
+ "field_score": {
+  "ppo": 0.76,
+  "az": 0.96,
+  "dqn": 0.44000000000000006,
+  "neat": 0.35,
+  "territory": 0.45,
+  "space-filler": 0.04
+ },
+ "games": 300,
+ "games_per_pair": 20,
+ "specs": {
+  "ppo": {
+   "kind": "ppo",
+   "path": "results/snapshots/ppo_r0056.play.pt",
+   "meta": {
+    "t": 1794531865.9650264,
+    "steps": 321978368,
+    "games": 1624606,
+    "it": 39304
+   }
+  },
+  "az": {
+   "kind": "az",
+   "path": "results/snapshots/az_r0056.play.pt",
+   "meta": {
+    "t": 1794525731.7289371,
+    "games": 18192,
+    "positions": 5486487
+   }
+  },
+  "dqn": {
+   "kind": "dqn",
+   "path": "results/snapshots/dqn_r0047.play.pt",
+   "meta": {
+    "t": 1794515418.9446673,
+    "steps": 87023424,
+    "games": 784847
+   }
+  },
+  "neat": {
+   "kind": "neat",
+   "path": "results/snapshots/neat_r0047.pkl",
+   "meta": {
+    "t": 1794515629.418212,
+    "gen": 4062,
+    "games": 4873920
+   }
+  },
+  "territory": {
+   "kind": "territory"
+  },
+  "space-filler": {
+   "kind": "space-filler"
+  }
+ },
+ "highlights": [
+  {
+   "path": "results/replays/r0056_hl0.json",
+   "caption": "Mini-AlphaZero vs PPO (#1 vs #2), longest game: Mini-AlphaZero wins after 417 ticks"
+  },
+  {
+   "path": "results/replays/r0056_hl1.json",
+   "caption": "Mini-AlphaZero vs DQN (#1 vs #3), longest game: Mini-AlphaZero wins after 278 ticks"
+  },
+  {
+   "path": "results/replays/r0056_hl2.json",
+   "caption": "NEAT (last place) \u2014 its longest win: NEAT wins after 361 ticks"
+  }
+ ],
+ "seconds": 456.6
+}
