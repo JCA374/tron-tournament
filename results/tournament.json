@@ -8,7 +8,7 @@
    "cpus": "0-3",
    "cores": 4,
    "started_at": 1794517089.275972,
-   "train": "523.8 M steps \u00b7 2.7 M games"
+   "train": "529.8 M steps \u00b7 2.8 M games"
   },
   "dqn": {
    "status": "retired",
@@ -64,5 +64,5 @@
  "leader": "az",
  "restarts": {},
  "note": "",
- "processed_round": 69
+ "processed_round": 70
 }
