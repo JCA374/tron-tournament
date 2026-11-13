@@ -1,1 +1,1 @@
-{"kind": "ppo", "path": "results/snapshots/ppo_r0041.play.pt", "meta": {"t": 1794504704.2175064, "steps": 238198784, "games": 1217503, "it": 29077}, "id": "ppo"}
+{"kind": "ppo", "path": "results/snapshots/ppo_r0057.play.pt", "meta": {"t": 1794533669.2560601, "steps": 335757312, "games": 1701015, "it": 40986}, "id": "ppo"}
