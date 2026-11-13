@@ -35,7 +35,7 @@
    "out_at": "2026-11-12T12:00:23.276141+01:00"
   },
   "az": {
-   "status": "finalist",
+   "status": "winner",
    "cpus": "4-7",
    "cores": 4,
    "started_at": 1794521512.732456,
@@ -60,9 +60,9 @@
   }
  ],
  "knockouts_done": 1,
- "final_done": false,
+ "final_done": true,
  "leader": "az",
  "restarts": {},
- "note": "",
+ "note": "Ended early on Friday at 13:20 (requested). Final: Mini-AlphaZero 168, PPO 30, 2 draws.",
  "processed_round": 77
 }

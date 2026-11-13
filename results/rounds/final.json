@@ -1,0 +1,60 @@
+{
+ "round": "final",
+ "t": "2026-11-13T13:20:06+0100",
+ "ids": [
+  "az",
+  "ppo"
+ ],
+ "ratings": {
+  "ppo": 1353.8281702501,
+  "az": 1646.1718297499
+ },
+ "score": [
+  [
+   null,
+   0.845
+  ],
+  [
+   0.155,
+   null
+  ]
+ ],
+ "field_score": {
+  "ppo": 0.155,
+  "az": 0.845
+ },
+ "games": 200,
+ "games_per_pair": 200,
+ "specs": {
+  "ppo": {
+   "kind": "ppo",
+   "path": "results/snapshots/ppo_final.play.pt",
+   "meta": {
+    "t": 1794571269.402833,
+    "steps": 630472704,
+    "games": 3348472,
+    "it": 76962
+   }
+  },
+  "az": {
+   "kind": "az",
+   "path": "results/snapshots/az_final.play.pt",
+   "meta": {
+    "t": 1794571287.517831,
+    "games": 18208,
+    "positions": 5491719
+   }
+  }
+ },
+ "highlights": [
+  {
+   "path": "results/replays/final_hl0.json",
+   "caption": "Mini-AlphaZero vs PPO (#1 vs #2), longest game: Mini-AlphaZero wins after 422 ticks"
+  },
+  {
+   "path": "results/replays/final_hl1.json",
+   "caption": "PPO (last place) \u2014 its longest win: PPO wins after 415 ticks"
+  }
+ ],
+ "seconds": 1007.3
+}

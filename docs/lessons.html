@@ -12,6 +12,13 @@
 <p class="lede">What this tournament taught, written down as it happens, newest first. Some are about the methods,
 some about running a two-day experiment unattended.</p>
 
+<div class="lesson"><h3>Search beats practice when you have the rules</h3>
+<p>Friday 13:20, the final: Mini-AlphaZero beat PPO 168 games to 30. Its network had been frozen for 13 hours by the catch-up
+rule while PPO trained alone, and PPO had played about 2.8 million practice games to its 18,000. On its own, that same network
+lost 95% of games to PPO. Inside a 128-simulation search of the exact game, it won 84%.</p>
+<p><b>Lesson:</b> when an exact, fast simulator exists, spend compute on looking ahead at decision time before spending it on
+more training. Raising the search from 32 to 128 simulations changed the result more than a whole night of training.</p></div>
+
 <div class="lesson"><h3>An opponent you always beat teaches nothing</h3>
 <p>Thursday 01:30–06:30. PPO, DQN and NEAT were flat for five hours. Their fixed training opponent was the space-filler bot, which
 PPO beat in 97% of its training games. At 06:39 the territory bot took its place (same share of games, nothing else changed).

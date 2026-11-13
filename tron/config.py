@@ -18,8 +18,8 @@ ANCHOR = ("space-filler", 1500.0)   # until results/anchor.json exists: then the
 SCHEDULE = [
     {"t": "2026-11-12T12:00:00+01:00", "kind": "knockout", "label": "knockout 1 (Thu 12:00)"},
     # knockout 2 (Fri 06:00) was cancelled on Thu 21:50: the tournament became a duel of PPO and Mini-AlphaZero
-    {"t": "2026-11-13T16:00:00+01:00", "kind": "final", "label": "the final duel starts (Fri 16:00)"},
-    {"t": "2026-11-13T18:00:00+01:00", "kind": "end", "label": "the winner is announced (Fri 18:00)"},
+    # Fri 12:40: ended early at your request, the final moved from 16:00 to now
+    {"t": "2026-11-13T13:01:00+01:00", "kind": "final", "label": "the final duel (moved forward from 16:00)"},
 ]
 ROUND_EVERY_MIN = 30
 GAMES_PER_PAIR = 20
