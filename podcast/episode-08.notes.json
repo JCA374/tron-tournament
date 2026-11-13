@@ -1,0 +1,5 @@
+["Final (Fri 13:03-13:20), 200 games: Mini-AlphaZero 168, PPO 30, 2 draws (84.5%)",
+ "Mini-AlphaZero's network was frozen since Fri 00:22 by the catch-up rule; PPO trained alone for 13 hours",
+ "Practice games: Mini-AlphaZero about 18,000, PPO about 2.8 million",
+ "PPO beat Mini-AlphaZero's bare network 95%; with its 128-simulation search, Mini-AlphaZero won 84%",
+ "Every game of the final is replayable in the Arena; final models saved in final_models/"]
